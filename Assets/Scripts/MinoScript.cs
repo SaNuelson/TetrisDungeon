@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class MinoBlockDto
 {
     public BlockScript Block;
     public Vector2Int Offset;
 }
 
-public class TetrominoScript : MonoBehaviour
+public class MinoScript : MonoBehaviour
 {
 
     public MinoBlockDto[] Blocks;
@@ -46,6 +47,15 @@ public class TetrominoScript : MonoBehaviour
             };
         }
 
+        // Center-point debug
+        var centerBlock = Instantiate(tetris.BlockPrefab);
+        centerBlock.transform.SetParent(transform, false);
+        centerBlock.transform.position = Center - Vector3.one * 0.5f;
+        centerBlock.transform.position = new Vector3(centerBlock.transform.position.x, centerBlock.transform.position.y , 0);
+        var centerBlockScript = centerBlock.GetComponent<BlockScript>();
+        centerBlockScript.BackgroundColor = Color.black;
+        centerBlockScript.ForegroundColor = Color.red;
+
         _isConstructed = true;
     }
 
@@ -79,5 +89,25 @@ public class TetrominoScript : MonoBehaviour
             block.Block.transform.position += newBlockTransformOffset - oldBlockTransformOffset;
         }
     }
+
+    public Vector3 GetCenter()
+    {
+        float minX = 0, minY = 0, maxX = 0, maxY = 0;
+        foreach(var block in Blocks)
+        {
+            float blockX = block.Offset.x;
+            float blockY = block.Offset.y;
+
+            if (blockX < minX) minX = blockX;
+            if (blockY < minY) minY = blockY;
+            if (blockX > maxX) maxX = blockX;
+            if (blockY > maxY) maxY = blockY;
+        }
+
+
+        return new Vector3((minX + maxX) / 2, (minY + maxY) / 2, 0);
+    }
+
+    public Vector3 Center => GetCenter();
 
 }

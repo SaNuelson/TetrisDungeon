@@ -2,24 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
+using UnityEngine.Events;
 
 public class TetrisController : MonoBehaviour
 {
-
-    public GameObject BlockPrefab;
-    public TetrominoPreset[] TetrominoPresets;
-
-    public float FallTime = 1f;
-
+    [Header("Game Settings")]
     public Vector2Int GridSize = new Vector2Int(8, 16);
     private Vector3 BlockSize = new Vector3(1, 1, 0);
 
-    public bool IsRunning = true;
+    [Header("Generation Settings")]
+    public GameObject BlockPrefab;
+    public TetrominoPreset[] TetrominoPresets;
 
-    private TetrominoScript _activeTetromino = null;
-    private TetrominoScript _activeTetrominoShadow = null;
+    [Tooltip("Size of queue of next planned tetrominos")]
+    public int QueueSize = 5;
+    private List<MinoScript> _minoQueue = new List<MinoScript>();
+
+    private MinoScript _activeTetromino = null;
+    private MinoScript _activeTetrominoShadow = null;
+
     private BlockScript[,] _grid;
+
+    [Header("Runtime Settings")]
+
+    public bool IsRunning = true;
+    public float FallTime = 1f;
 
     private IEnumerator _tetrisClock;
 
@@ -27,6 +34,8 @@ public class TetrisController : MonoBehaviour
     private Vector3 _fieldDiagonal;
 
     public Vector2Int GridTop => new Vector2Int(GridSize.x / 2, GridSize.y);
+
+    public UnityEvent QueueChangedEvent = new UnityEvent();
 
     IEnumerator RunFallClock()
     {
@@ -47,9 +56,22 @@ public class TetrisController : MonoBehaviour
 
         _grid = new BlockScript[GridSize.y, GridSize.x];
 
+        while (_minoQueue.Count < QueueSize)
+            _minoQueue.Add(CreateMino());
+        QueueChangedEvent.Invoke();
+
         _tetrisClock = RunFallClock();
         StartCoroutine(_tetrisClock);
-        SpawnTetromino();
+        SpawnMino();
+
+
+        //foreach(var preset in TetrominoPresets)
+        //{
+        //    var test = new GameObject();
+        //    var script = test.AddComponent<MinoScript>();
+        //    script.ConstructFromPreset(preset, this);
+        //    print("Preset " + preset.Name + " has center " + script.Center);
+        //}
     }
 
     void Update()
@@ -84,10 +106,89 @@ public class TetrisController : MonoBehaviour
 
     #endregion
 
+    #region Create & Dispose Methods
+
+    MinoScript CreateMino()
+    {
+        var minoPreset = TetrominoPresets[UnityEngine.Random.Range(0, TetrominoPresets.Length)];
+
+        var newMino = new GameObject("Tetromino");
+        newMino.transform.SetParent(transform, false);
+
+        var minoScript = newMino.AddComponent<MinoScript>();
+        minoScript.ConstructFromPreset(minoPreset, this);
+        minoScript.gameObject.SetActive(false);
+
+        return minoScript;
+    }
+
+    /// <summary>
+    /// Generate a new random tetromino and its shadow.
+    /// </summary>
+    void SpawnMino()
+    {
+        if (_activeTetromino != null)
+        {
+            Debug.LogError("SpawnTetromino -- active tetromino exists");
+        }
+
+        _activeTetromino = _minoQueue.First();
+        _activeTetromino.gameObject.SetActive(true);
+
+        _minoQueue.RemoveAt(0);
+        _minoQueue.Add(CreateMino());
+        QueueChangedEvent.Invoke();
+        
+        _activeTetrominoShadow = Instantiate(_activeTetromino);
+        _activeTetrominoShadow.transform.SetParent(transform, false);
+        foreach(var block in _activeTetrominoShadow.Blocks)
+        {
+            block.Block.BackgroundColor = new Color(.4f, .4f, .4f);
+            block.Block.ForegroundColor = new Color(.8f, .8f, .8f);
+        }
+
+        ResetShadow();
+    }
+
+    /// <summary>
+    /// Let go of tetromino and put it into the game field.
+    /// Also destroy the shadow.
+    /// </summary>
+    void FreeMino()
+    {
+        if (_activeTetromino == null)
+        {
+            Debug.LogError("DropTetromino -- no active tetromino");
+        }
+
+        var tetroBlocks = _activeTetromino.Blocks;
+        var tetroPos = _activeTetromino.BasePosition;
+
+        foreach (var block in tetroBlocks)
+        {
+            var blockPos = tetroPos + block.Offset;
+
+            if (_grid[blockPos.y, blockPos.x] != null)
+            {
+                Debug.LogError("DropTetromino -- dropping on non-null tile" + blockPos);
+            }
+
+            _grid[blockPos.y, blockPos.x] = block.Block;
+        }
+
+        _activeTetromino = null;
+        Destroy(_activeTetrominoShadow.gameObject);
+        _activeTetrominoShadow = null;
+
+        ClearFilledRows();
+    }
+
+    #endregion
+
     /// <summary>
     /// Compute and set the position of shadow based on position of active tetromino.
     /// </summary>
-    void ResetShadow()
+    private void ResetShadow()
     {
         if (_activeTetromino == null || _activeTetrominoShadow == null)
         {
@@ -109,8 +210,8 @@ public class TetrisController : MonoBehaviour
         var collided = !TryMoveTetromino(Vector2Int.down);
         if (collided)
         {
-            FreeTetromino();
-            SpawnTetromino();
+            FreeMino();
+            SpawnMino();
         }
     }
 
@@ -167,71 +268,6 @@ public class TetrisController : MonoBehaviour
     }
 
     /// <summary>
-    /// Generate a new random tetromino and its shadow.
-    /// </summary>
-    void SpawnTetromino()
-    {
-        if (_activeTetromino != null)
-        {
-            Debug.LogError("SpawnTetromino -- active tetromino exists");
-        }
-
-        var tetroPreset = TetrominoPresets[UnityEngine.Random.Range(0, TetrominoPresets.Length)];
-
-        var newTetro = new GameObject("Tetromino");
-        newTetro.transform.SetParent(transform, false);
-
-        var tetroScript = newTetro.AddComponent<TetrominoScript>();
-        tetroScript.ConstructFromPreset(tetroPreset, this);
-        _activeTetromino = tetroScript;
-
-        
-        var tetroShadowPreset = tetroPreset.GetShadow();
-
-        var newTetroShadow = new GameObject("TetrominoShadow");
-        newTetroShadow.transform.SetParent(transform, false);
-
-        var tetroShadowScript = newTetroShadow.AddComponent<TetrominoScript>();
-        tetroShadowScript.ConstructFromPreset(tetroShadowPreset, this);
-        _activeTetrominoShadow = tetroShadowScript;
-
-        ResetShadow();
-    }
-
-    /// <summary>
-    /// Let go of tetromino and put it into the game field.
-    /// Also destroy the shadow.
-    /// </summary>
-    void FreeTetromino()
-    {
-        if (_activeTetromino == null)
-        {
-            Debug.LogError("DropTetromino -- no active tetromino");
-        }
-
-        var tetroBlocks = _activeTetromino.Blocks;
-        var tetroPos = _activeTetromino.BasePosition;
-
-        foreach (var block in tetroBlocks)
-        {
-            var blockPos = tetroPos + block.Offset;
-
-            if (_grid[blockPos.y, blockPos.x] != null)
-            {
-                Debug.LogError("DropTetromino -- dropping on non-null tile" + blockPos);
-            }
-
-            _grid[blockPos.y, blockPos.x] = block.Block;
-        }
-
-        _activeTetromino = null;
-        Destroy(_activeTetrominoShadow.gameObject);
-        _activeTetrominoShadow = null;
-
-        ClearFilledRows();
-    }
-
-    /// <summary>
     /// Check for any filled rows and remove them if found.
     /// </summary>
     void ClearFilledRows()
@@ -245,7 +281,6 @@ public class TetrisController : MonoBehaviour
             {
                 if (_grid[y, x] == null)
                 {
-                    print("..has empty tile at " + x);
                     all = false;
                     // break;
                 }
@@ -253,7 +288,6 @@ public class TetrisController : MonoBehaviour
 
             if (all)
             {
-                print("Found full row, removing...");
                 for (int xx = 0; xx < GridSize.x; xx++)
                 {
                     Destroy(_grid[y, xx].gameObject);
@@ -314,6 +348,18 @@ public class TetrisController : MonoBehaviour
         }
     }
 
+    #region API
+
+    public MinoScript GetQueuedMino(int i)
+    {
+        if (i < 0 || i >= _minoQueue.Count)
+        {
+            Debug.LogError("GetQueuedMino -- invalid index " + i);
+            return null;
+        }
+        return _minoQueue[i];
+    }
+
     public Vector3 GridToLocal(Vector2Int position)
     {
         var bottomLeft = _fieldCenter - _fieldDiagonal / 2;
@@ -337,7 +383,7 @@ public class TetrisController : MonoBehaviour
         return true;
     }
 
-    public bool CanRotate(TetrominoScript tetromino)
+    public bool CanRotate(MinoScript tetromino)
     {
         var basePos = tetromino.BasePosition;
         foreach (var block in tetromino.Blocks)
@@ -350,7 +396,7 @@ public class TetrisController : MonoBehaviour
         return true;
     }
 
-    public bool CanMove(TetrominoScript tetromino, Vector2Int direction)
+    public bool CanMove(MinoScript tetromino, Vector2Int direction)
     {
         var basePos = tetromino.BasePosition;
         foreach (var block in tetromino.Blocks)
@@ -362,6 +408,8 @@ public class TetrisController : MonoBehaviour
         }
         return true;
     }
+
+    #endregion
 
     #region Editor & Gizmos
 

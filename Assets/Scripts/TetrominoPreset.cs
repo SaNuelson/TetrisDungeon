@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 [System.Serializable] public class TetrominoPreset
 {
-    public string Name = "New anymino";
+    public string Name = "New mino";
     public Vector2Int[] Offsets;
     public Color ForegroundColor = Color.yellow;
     public Color BackgroundColor = Color.black;
