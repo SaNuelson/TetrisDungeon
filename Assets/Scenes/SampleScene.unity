@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 22831345}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -6.6, z: 10}
+  m_LocalPosition: {x: 0, y: -9, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 479700475}
@@ -301,64 +301,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BlockPrefab: {fileID: 8045640384400432935, guid: a98dc43e218b25a459246ab368dd06b3, type: 3}
   TetrominoPresets:
-  - Name: Square
+  - Name: L
+    ForegroundColor: {r: 0.12454414, g: 1, b: 0, a: 1}
+    BackgroundColor: {r: 0.19555518, g: 0.7169812, b: 0, a: 1}
+    BoxSize: {x: 3, y: 3}
     Offsets:
-    - {x: 0, y: 0}
     - {x: 1, y: 0}
+    - {x: 1, y: 1}
+    - {x: 1, y: 2}
+    - {x: 2, y: 0}
+    Anchor: {x: 1, y: 1}
+  - Name: J
+    ForegroundColor: {r: 0.6412811, g: 0, b: 1, a: 1}
+    BackgroundColor: {r: 0.3230753, g: 0, b: 0.5, a: 1}
+    BoxSize: {x: 3, y: 3}
+    Offsets:
+    - {x: 1, y: 0}
+    - {x: 1, y: 1}
+    - {x: 1, y: 2}
+    - {x: 0, y: 0}
+    Anchor: {x: 1, y: 1}
+  - Name: O
+    ForegroundColor: {r: 0, g: 0.2157743, b: 1, a: 1}
+    BackgroundColor: {r: 0, g: 0.04117023, b: 0.6037736, a: 1}
+    BoxSize: {x: 4, y: 3}
+    Offsets:
+    - {x: 1, y: 1}
+    - {x: 1, y: 2}
+    - {x: 2, y: 1}
+    - {x: 2, y: 2}
+    Anchor: {x: 1.5, y: 1.5}
+  - Name: I
+    ForegroundColor: {r: 0, g: 1, b: 0.49324107, a: 1}
+    BackgroundColor: {r: 0, g: 0.6792453, b: 0.29833516, a: 1}
+    BoxSize: {x: 4, y: 4}
+    Offsets:
+    - {x: 1, y: 0}
+    - {x: 1, y: 1}
+    - {x: 1, y: 2}
+    - {x: 1, y: 3}
+    Anchor: {x: 1.5, y: 1.5}
+  - Name: S
+    ForegroundColor: {r: 0.6164452, g: 1, b: 0, a: 1}
+    BackgroundColor: {r: 0.34803662, g: 0.5660378, b: 0.008009953, a: 1}
+    BoxSize: {x: 3, y: 3}
+    Offsets:
     - {x: 0, y: 1}
     - {x: 1, y: 1}
-    ForegroundColor: {r: 0.18316127, g: 0.47749573, b: 0.7924528, a: 1}
-    BackgroundColor: {r: 0.09985758, g: 0.20770817, b: 0.41509432, a: 1}
-  - Name: L mino
+    - {x: 1, y: 2}
+    - {x: 2, y: 2}
+    Anchor: {x: 1, y: 1}
+  - Name: Z
+    ForegroundColor: {r: 1, g: 0.29612744, b: 0, a: 1}
+    BackgroundColor: {r: 0.46226418, g: 0.17986657, b: 0.010902455, a: 1}
+    BoxSize: {x: 3, y: 3}
     Offsets:
-    - {x: 0, y: 0}
-    - {x: 1, y: 0}
     - {x: 0, y: 1}
+    - {x: 1, y: 1}
+    - {x: 1, y: 0}
     - {x: 2, y: 0}
-    ForegroundColor: {r: 0.16785331, g: 0.8679245, b: 0.17461166, a: 1}
-    BackgroundColor: {r: 0.10034709, g: 0.5188679, b: 0.12545432, a: 1}
-  - Name: Reverse L mino
+    Anchor: {x: 1, y: 1}
+  - Name: T
+    ForegroundColor: {r: 0.7706003, g: 0, b: 1, a: 1}
+    BackgroundColor: {r: 0.3470571, g: 0.011764695, b: 0.4627451, a: 1}
+    BoxSize: {x: 3, y: 3}
     Offsets:
-    - {x: 0, y: 0}
-    - {x: 1, y: 0}
-    - {x: 0, y: -1}
-    - {x: 2, y: 0}
-    ForegroundColor: {r: 1, g: 0.015686274, b: 0.69090986, a: 1}
-    BackgroundColor: {r: 0.4433962, g: 0.085751146, b: 0.36944425, a: 1}
-  - Name: I mino
-    Offsets:
-    - {x: 0, y: -1}
-    - {x: 0, y: 0}
     - {x: 0, y: 1}
-    - {x: 0, y: 2}
-    ForegroundColor: {r: 0.764151, g: 0.3090861, b: 0.20545568, a: 1}
-    BackgroundColor: {r: 0.38679248, g: 0.0529103, b: 0.0529103, a: 1}
-  - Name: S mino
-    Offsets:
-    - {x: 0, y: 0}
-    - {x: 0, y: -1}
-    - {x: -1, y: -1}
+    - {x: 1, y: 1}
+    - {x: 2, y: 1}
     - {x: 1, y: 0}
-    ForegroundColor: {r: 0.5128427, g: 0.015686274, b: 1, a: 1}
-    BackgroundColor: {r: 0.22894876, g: 0.08067818, b: 0.3490566, a: 1}
-  - Name: Z mino
-    Offsets:
-    - {x: 0, y: 0}
-    - {x: 0, y: 1}
-    - {x: -1, y: 1}
-    - {x: 1, y: 0}
-    ForegroundColor: {r: 0.015686274, g: 1, b: 0.86457914, a: 1}
-    BackgroundColor: {r: 0.08993414, g: 0.3196733, b: 0.4056604, a: 1}
-  - Name: T mino
-    Offsets:
-    - {x: 0, y: 0}
-    - {x: 0, y: 1}
-    - {x: -1, y: 0}
-    - {x: 1, y: 0}
-    ForegroundColor: {r: 1, g: 0.015686274, b: 0.26194635, a: 1}
-    BackgroundColor: {r: 0.3490566, g: 0.044455323, b: 0.09864384, a: 1}
+    Anchor: {x: 1, y: 1}
   QueueSize: 5
   MinoQueue: []
+  QueueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &135206772
 Transform:
   m_ObjectHideFlags: 0
@@ -371,6 +388,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 758507750}
+  - {fileID: 894740142}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -480,7 +498,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 210882028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.4, z: 10}
+  m_LocalPosition: {x: 0, y: -6, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 366709244}
@@ -815,6 +833,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &559717850
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 559717851}
+  m_Layer: 0
+  m_Name: HoldPreview
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &559717851
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559717850}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12.3, y: 0, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1895736327}
+  m_Father: {fileID: 894740142}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &619004480
 GameObject:
@@ -1166,12 +1215,12 @@ GameObject:
   - component: {fileID: 894740142}
   - component: {fileID: 894740141}
   m_Layer: 0
-  m_Name: MinoQueue
+  m_Name: Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &894740141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1181,16 +1230,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 894740140}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2d57ab94c2b1b246bdd9a202dfebb68, type: 3}
+  m_Script: {fileID: 11500000, guid: 813eed2a6ff7b454c89abd5edd14a500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 0}
-  _previewBoxes:
-  - {fileID: 892037604}
-  - {fileID: 976952794}
-  - {fileID: 210882028}
-  - {fileID: 22831345}
-  - {fileID: 1041672657}
 --- !u!4 &894740142
 Transform:
   m_ObjectHideFlags: 0
@@ -1198,7 +1240,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 894740140}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 6.13, y: 6.16, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1207,8 +1249,9 @@ Transform:
   - {fileID: 210882029}
   - {fileID: 22831346}
   - {fileID: 1041672658}
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  - {fileID: 559717851}
+  m_Father: {fileID: 135206772}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &976952794
 GameObject:
@@ -1234,7 +1277,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 976952794}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.2, z: 10}
+  m_LocalPosition: {x: 0, y: -3, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1435872241}
@@ -1265,7 +1308,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1041672657}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -8.8, z: 10}
+  m_LocalPosition: {x: 0, y: -12, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 201676420}
@@ -1515,3 +1558,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1833302719}
   m_CullTransparentMesh: 1
+--- !u!1 &1895736326
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1895736327}
+  - component: {fileID: 1895736328}
+  m_Layer: 0
+  m_Name: Square
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1895736327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895736326}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 15}
+  m_LocalScale: {x: 2.5, y: 2, z: 1}
+  m_Children: []
+  m_Father: {fileID: 559717851}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1895736328
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895736326}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0

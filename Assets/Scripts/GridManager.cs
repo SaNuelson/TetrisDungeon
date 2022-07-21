@@ -221,10 +221,13 @@ public class GridManager : MonoBehaviour
         }
 
         if (!CanRotate(ActiveMino, clockwise))
+        {
+            print("TV2: Rotate collided");
             return false;
+        }
 
-        ActiveMino.Rotate(); // TODO: clock/counterclock-wise support in minos
-        ActiveMinoShadow.Rotate();
+        ActiveMino.Rotate(clockwise); // TODO: clock/counterclock-wise support in minos
+        ActiveMinoShadow.Rotate(clockwise);
         ResetShadow();
         return true;
     }
@@ -269,21 +272,10 @@ public class GridManager : MonoBehaviour
     public bool CanRotate(MinoScript mino, bool clockwise)
     {
         var minoPosition = mino.BasePosition;
-        foreach(var block in mino.Blocks)
+        var rotatedOffsets = mino.GetRotated(clockwise);
+        foreach(var offset in rotatedOffsets)
         {
-            var blockOffset = block.Offset;
-
-            Vector2Int rotatedOffset;
-            if (clockwise)
-            {
-                rotatedOffset = new Vector2Int(-blockOffset.y, blockOffset.x);
-            }
-            else
-            {
-                rotatedOffset = new Vector2Int(blockOffset.y, -blockOffset.x);
-            }
-
-            if (!IsTileFree(minoPosition + rotatedOffset))
+            if (!IsTileFree(minoPosition + offset))
                 return false;
         }
         return true;

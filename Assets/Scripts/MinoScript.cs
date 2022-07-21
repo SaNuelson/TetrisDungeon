@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 [System.Serializable]
 public class MinoBlockDto
@@ -15,7 +16,11 @@ public class MinoScript : MonoBehaviour
     public MinoBlockDto[] Blocks;
     public Vector2Int BasePosition;
 
+    public MinoPreset Preset;
+
     private bool _isConstructed = false;
+
+    public Vector3 Anchor => new Vector3(Preset.Anchor.x, Preset.Anchor.y, 0);
 
     public void ConstructFromPreset(MinoPreset preset, GameObject blockPrefab)
     {
@@ -26,6 +31,7 @@ public class MinoScript : MonoBehaviour
 
         Blocks = new MinoBlockDto[preset.Offsets.Length];
         gameObject.name = preset.Name;
+        Preset = preset;
 
         for (int i = 0; i < preset.Offsets.Length; i++)
         {
@@ -46,23 +52,36 @@ public class MinoScript : MonoBehaviour
             };
         }
 
-        // Center-point debug
-        var centerBlock = Instantiate(blockPrefab);
-        centerBlock.transform.SetParent(transform, false);
-        centerBlock.transform.position = Center - Vector3.one * 0.5f;
-        centerBlock.transform.position = new Vector3(centerBlock.transform.position.x, centerBlock.transform.position.y, 0);
-        var centerBlockScript = centerBlock.GetComponent<BlockScript>();
-        centerBlockScript.BackgroundColor = Color.black;
-        centerBlockScript.ForegroundColor = Color.red;
+        //// Box debug
+        //for (int x = 0; x < preset.BoxSize.x; x++)
+        //{
+        //    for (int y = 0; y < preset.BoxSize.y; y++)
+        //    {
+        //        var newBlock = Instantiate(blockPrefab);
+        //        var newBlockScript = newBlock.GetComponent<BlockScript>();
+
+        //        newBlock.transform.SetParent(transform, false);
+        //        newBlock.transform.position += new Vector3(x, y, 1);
+
+        //        newBlockScript.ForegroundColor = Color.white;
+        //        newBlockScript.BackgroundColor = Color.gray;
+        //    }
+        //}
+
+        //// Center-point debug
+        //var centerBlock = Instantiate(blockPrefab);
+        //centerBlock.transform.SetParent(transform, false);
+        //centerBlock.transform.position = new Vector3(preset.Anchor.x, preset.Anchor.y, 0);
+        //var centerBlockScript = centerBlock.GetComponent<BlockScript>();
+        //centerBlockScript.BackgroundColor = Color.black;
+        //centerBlockScript.ForegroundColor = Color.red;
+        //centerBlock.transform.localScale = 0.5f * Vector3.one;
 
         _isConstructed = true;
     }
     public void Move(Vector2Int direction)
     {
-        foreach (var block in Blocks)
-        {
-            block.Block.transform.position += new Vector3(direction.x, direction.y, 0);
-        }
+        transform.position += new Vector3(direction.x, direction.y, 0);
         BasePosition += direction;
     }
 
@@ -76,36 +95,66 @@ public class MinoScript : MonoBehaviour
         BasePosition = newBasePosition;
     }
 
-    public void Rotate()
+    public void Rotate(bool clockwise)
     {
         foreach (var block in Blocks)
         {
-            var newBlockOffset = new Vector2Int(-block.Offset.y, block.Offset.x);
-            var oldBlockTransformOffset = new Vector3(block.Offset.x, block.Offset.y);
-            var newBlockTransformOffset = new Vector3(-block.Offset.y, block.Offset.x);
-            block.Offset = newBlockOffset;
-            block.Block.transform.position += newBlockTransformOffset - oldBlockTransformOffset;
+            var oldBlockCenterOffset = block.Offset - Preset.Anchor;
+            Vector2 newBlockCenterOffset;
+            if (clockwise)
+            {
+                newBlockCenterOffset = new Vector2(oldBlockCenterOffset.y, -oldBlockCenterOffset.x);
+            }
+            else
+            {
+                newBlockCenterOffset = new Vector2(-oldBlockCenterOffset.y, oldBlockCenterOffset.x);
+            }
+            var newBlockBaseOffset = newBlockCenterOffset + Preset.Anchor;
+            
+            Assert.AreEqual(newBlockBaseOffset.x % 1, 0);
+            Assert.AreEqual(newBlockBaseOffset.y % 1, 0);
+
+            block.Offset = new Vector2Int((int)newBlockBaseOffset.x, (int)newBlockBaseOffset.y);
+            block.Block.transform.position += new Vector3(newBlockCenterOffset.x - oldBlockCenterOffset.x, newBlockCenterOffset.y - oldBlockCenterOffset.y, 0);
         }
     }
 
-    public Vector3 GetCenter()
+    public Vector2Int[] GetRotated(bool clockwise)
     {
-        float minX = 0, minY = 0, maxX = 0, maxY = 0;
-        foreach(var block in Blocks)
+        Vector2Int[] rotatedOffsets = new Vector2Int[Blocks.Length];
+        for (int i = 0; i < Blocks.Length; i++)
         {
-            float blockX = block.Offset.x;
-            float blockY = block.Offset.y;
+            MinoBlockDto block = Blocks[i];
+            var oldBlockCenterOffset = block.Offset - Preset.Anchor;
+            Vector2 newBlockCenterOffset;
+            if (clockwise)
+            {
+                newBlockCenterOffset = new Vector2(oldBlockCenterOffset.y, -oldBlockCenterOffset.x);
+            }
+            else
+            {
+                newBlockCenterOffset = new Vector2(-oldBlockCenterOffset.y, oldBlockCenterOffset.x);
+            }
+            var newBlockBaseOffset = newBlockCenterOffset + Preset.Anchor;
 
-            if (blockX < minX) minX = blockX;
-            if (blockY < minY) minY = blockY;
-            if (blockX > maxX) maxX = blockX;
-            if (blockY > maxY) maxY = blockY;
+            Assert.AreEqual(newBlockBaseOffset.x % 1, 0);
+            Assert.AreEqual(newBlockBaseOffset.y % 1, 0);
+
+            rotatedOffsets[i] = new Vector2Int((int)newBlockBaseOffset.x, (int)newBlockBaseOffset.y);
         }
-
-
-        return new Vector3((minX + maxX) / 2, (minY + maxY) / 2, 0);
+        return rotatedOffsets;
     }
 
-    public Vector3 Center => GetCenter();
+    private void OnDrawGizmos()
+    {
+        var botleft = transform.position - new Vector3(.5f, .5f, 0);
+        var botright = new Vector3(botleft.x + Preset.BoxSize.x, botleft.y);
+        var topleft = new Vector3(botleft.x, botleft.y + Preset.BoxSize.y);
+        var topright = new Vector3(botright.x, topleft.y);
 
+        Gizmos.DrawLine(topleft, topright);
+        Gizmos.DrawLine(topright, botright);
+        Gizmos.DrawLine(botright, botleft);
+        Gizmos.DrawLine(botleft, topleft);
+    }
 }

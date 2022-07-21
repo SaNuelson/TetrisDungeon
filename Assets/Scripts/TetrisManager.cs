@@ -12,6 +12,8 @@ public class TetrisManager : MonoBehaviour
     public uint QueueSize;
     public List<MinoScript> MinoQueue;
 
+    public UnityEvent QueueChanged = new UnityEvent();
+
     private void Awake()
     {
         MinoQueue = new List<MinoScript>();
@@ -39,10 +41,15 @@ public class TetrisManager : MonoBehaviour
 
     private void FillQueue()
     {
+        if (MinoQueue.Count == QueueSize)
+            return;
+
         while(MinoQueue.Count < QueueSize)
         {
             MinoQueue.Add(CreateMino());
         }
+
+        QueueChanged.Invoke();
     }
 
     private MinoScript CreateMino()
