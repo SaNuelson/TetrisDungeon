@@ -12,6 +12,8 @@ public class GridManager : MonoBehaviour
 
     public Vector2Int GridSize = new Vector2Int(8, 16);
 
+    public bool EnableKickFlip = true;
+
     [Header("Controls")]
     public KeyCode DropMinoKey = KeyCode.Space;
     public KeyCode RotateMinoClockwiseKey = KeyCode.UpArrow;
@@ -24,8 +26,11 @@ public class GridManager : MonoBehaviour
     public MinoScript ActiveMino = null;
     public MinoScript ActiveMinoShadow = null;
 
+    public MinoScript HeldMino = null;
+
     public UnityEvent MinoFallen = new UnityEvent();
     public UnityEvent LineCleared = new UnityEvent();
+    public UnityEvent HeldMinoChanged = new UnityEvent();
 
     private TetrisManager tetris;
 
@@ -85,6 +90,10 @@ public class GridManager : MonoBehaviour
         {
             TryRotateMino(clockwise: false);
         }
+        if (Input.GetKeyDown(HoldMinoKey))
+        {
+            SwapMino();
+        }
     }
 
     private void Step()
@@ -104,9 +113,13 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void SpawnMino()
+    public void SpawnMino(MinoScript customMino = null)
     {
-        ActiveMino = tetris.PopNextMino();
+        if (customMino != null)
+            ActiveMino = customMino;
+        else
+            ActiveMino = tetris.PopNextMino();
+        
         ActiveMino.gameObject.SetActive(true);
         ActiveMino.transform.SetParent(transform, false);
         ActiveMino.BasePosition = new Vector2Int(GridSize.x / 2, GridSize.y);
@@ -129,9 +142,18 @@ public class GridManager : MonoBehaviour
         ResetShadow();
     }
 
+    public void SwapMino()
+    {
+        var nextMino = HeldMino;
+        HeldMino = ActiveMino;
+        HeldMino.gameObject.SetActive(false);
+        Destroy(ActiveMinoShadow.gameObject);
+        SpawnMino(nextMino);
+        HeldMinoChanged.Invoke();
+    }
+
     public void FreeMino()
     {
-        // TODO: Destroy, check lines
         foreach (var block in ActiveMino.Blocks)
         {
             var blockPos = ActiveMino.BasePosition + block.Offset;
@@ -223,6 +245,8 @@ public class GridManager : MonoBehaviour
         if (!CanRotate(ActiveMino, clockwise))
         {
             print("TV2: Rotate collided");
+            if (EnableKickFlip)
+                return TryKickRotateMino(clockwise);
             return false;
         }
 
@@ -230,6 +254,32 @@ public class GridManager : MonoBehaviour
         ActiveMinoShadow.Rotate(clockwise);
         ResetShadow();
         return true;
+    }
+
+    public bool TryKickRotateMino(bool clockwise)
+    {
+        return TryKickFlip(Vector2Int.left)
+            || TryKickFlip(Vector2Int.right)
+            || TryKickFlip(Vector2Int.up);
+
+        bool TryKickFlip(Vector2Int direction)
+        {
+            if (!CanMove(ActiveMino, direction))
+                return false;
+
+            ActiveMino.Move(direction);
+
+            if (CanRotate(ActiveMino, clockwise))
+            {
+                ActiveMino.Rotate(clockwise);
+                ActiveMinoShadow.Rotate(clockwise);
+                ResetShadow();
+                return true;
+            }
+
+            ActiveMino.Move(-direction);
+            return false;
+        }
     }
 
     public void ResetShadow()
