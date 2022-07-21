@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Tetris Overlay
+  - Tetris Blocks
+  - Tetris Underlay
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Dungeon Background
+    uniqueID: 815701499
+    locked: 0
+  - name: Dungeon Mainground
+    uniqueID: 2772371175
+    locked: 0
+  - name: Dungeon Foreground
+    uniqueID: 3970359119
+    locked: 0
+  - name: Tetris Background
+    uniqueID: 2611123033
+    locked: 0
+  - name: Tetris Mainground
+    uniqueID: 4238475803
+    locked: 0
+  - name: Tetris Foreground
+    uniqueID: 1202021241
+    locked: 0
