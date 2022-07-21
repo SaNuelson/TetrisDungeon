@@ -17,7 +17,7 @@ public class MinoScript : MonoBehaviour
 
     private bool _isConstructed = false;
 
-    public void ConstructFromPreset(TetrominoPreset preset, TetrisController tetris)
+    public void ConstructFromPreset(MinoPreset preset, GameObject blockPrefab)
     {
         if (_isConstructed)
         {
@@ -25,12 +25,11 @@ public class MinoScript : MonoBehaviour
         }
 
         Blocks = new MinoBlockDto[preset.Offsets.Length];
-        BasePosition = tetris.GridTop;
-        transform.position = tetris.GridToLocal(tetris.GridTop);
+        gameObject.name = preset.Name;
 
         for (int i = 0; i < preset.Offsets.Length; i++)
         {
-            var newBlock = Instantiate(tetris.BlockPrefab);
+            var newBlock = Instantiate(blockPrefab);
             var blockOffset = preset.Offsets[i];
             var newBlockScript = newBlock.GetComponent<BlockScript>();
 
@@ -48,17 +47,16 @@ public class MinoScript : MonoBehaviour
         }
 
         // Center-point debug
-        var centerBlock = Instantiate(tetris.BlockPrefab);
+        var centerBlock = Instantiate(blockPrefab);
         centerBlock.transform.SetParent(transform, false);
         centerBlock.transform.position = Center - Vector3.one * 0.5f;
-        centerBlock.transform.position = new Vector3(centerBlock.transform.position.x, centerBlock.transform.position.y , 0);
+        centerBlock.transform.position = new Vector3(centerBlock.transform.position.x, centerBlock.transform.position.y, 0);
         var centerBlockScript = centerBlock.GetComponent<BlockScript>();
         centerBlockScript.BackgroundColor = Color.black;
         centerBlockScript.ForegroundColor = Color.red;
 
         _isConstructed = true;
     }
-
     public void Move(Vector2Int direction)
     {
         foreach (var block in Blocks)

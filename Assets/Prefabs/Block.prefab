@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7895887601684515774}
   - component: {fileID: 8683057834273196555}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5658303860449159347}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 0.95, y: 0.95, z: 1}
   m_Children: []
   m_Father: {fileID: 2329548497190824317}
@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6116201124478518820}
   - component: {fileID: 7173106034773290626}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6320352653070342710}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 9}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children: []
   m_Father: {fileID: 2329548497190824317}
@@ -174,7 +174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2329548497190824317}
   - component: {fileID: 9089046102977225945}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
