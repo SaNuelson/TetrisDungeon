@@ -2,40 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockScript : MonoBehaviour
+namespace Assets.Scripts.Tetris
 {
-    private void Awake()
+    public class BlockScript : MonoBehaviour
     {
-        renderer = GetComponent<SpriteRenderer>();
-        if(renderer == null)
-            renderer = gameObject.AddComponent<SpriteRenderer>();
-        renderer.sortingLayerName = "Tetris Mainground";
-        color = renderer.color;
-    }
-
-    public Color Color
-    {
-        get => color;
-        set
+        private void Awake()
         {
-            color = value;
+            renderer = GetComponent<SpriteRenderer>();
             if (renderer == null)
                 renderer = gameObject.AddComponent<SpriteRenderer>();
-            renderer.color = value;
+            renderer.sortingLayerName = "Tetris Mainground";
+            color = renderer.color;
         }
-    }
 
-    public Sprite Sprite
-    {
-        get => renderer.sprite;
-        set
+        public Color Color
         {
-            if (renderer == null)
-                renderer = gameObject.AddComponent<SpriteRenderer>();
-            renderer.sprite = value;
+            get => color;
+            set
+            {
+                color = value;
+                if (renderer == null)
+                    renderer = gameObject.AddComponent<SpriteRenderer>();
+                renderer.color = value;
+            }
         }
-    }
 
-    [SerializeField] private Color color;
-    [SerializeField] private SpriteRenderer renderer;
+        public Sprite Sprite
+        {
+            get => renderer.sprite;
+            set
+            {
+                if (renderer == null)
+                    renderer = gameObject.AddComponent<SpriteRenderer>();
+                renderer.sprite = value;
+            }
+        }
+
+        [SerializeField] private Color color;
+        [SerializeField] private SpriteRenderer renderer;
+    }
 }

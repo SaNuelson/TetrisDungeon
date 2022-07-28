@@ -2,72 +2,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TetrisInfoManager : MonoBehaviour
+namespace Assets.Scripts.Tetris
 {
-    private TetrisManager tetris;
-    private GridManager grid;
-
-    private GameObject[] queueBoxes;
-    private GameObject[] queueMinos;
-
-    private GameObject swapBox;
-    private GameObject swapMino = null;
-
-    private float scaleFactor = 0.6f;
-
-    private void Start()
+    public class TetrisInfoManager : MonoBehaviour
     {
-        tetris = transform.parent.GetComponent<TetrisManager>();
-        tetris.QueueChanged.AddListener(OnQueueChanged);
+        private TetrisManager tetris;
+        private GridManager grid;
 
-        grid = transform.parent.GetComponentInChildren<GridManager>();
-        grid.HeldMinoChanged.AddListener(OnHeldMinoChanged);
+        private GameObject[] queueBoxes;
+        private GameObject[] queueMinos;
 
-        queueBoxes = new GameObject[tetris.QueueSize];
-        queueMinos = new GameObject[tetris.QueueSize];
-        for (int i = 0; i < queueBoxes.Length; i++)
+        private GameObject swapBox;
+        private GameObject swapMino = null;
+
+        private float scaleFactor = 0.6f;
+
+        private void Start()
         {
-            queueBoxes[i] = transform.Find("Preview" + (i + 1)).gameObject;
-        }
+            tetris = transform.parent.GetComponent<TetrisManager>();
+            tetris.QueueChanged.AddListener(OnQueueChanged);
 
-        swapBox = transform.Find("HoldPreview").gameObject;
+            grid = transform.parent.GetComponentInChildren<GridManager>();
+            grid.HeldMinoChanged.AddListener(OnHeldMinoChanged);
 
-        OnQueueChanged(); // manual first fill
-    }
-
-    private void OnQueueChanged()
-    {
-        for (int i = 0; i < tetris.QueueSize; i++)
-        {
-            if (queueMinos[i] != null)
+            queueBoxes = new GameObject[tetris.QueueSize];
+            queueMinos = new GameObject[tetris.QueueSize];
+            for (int i = 0; i < queueBoxes.Length; i++)
             {
-                Destroy(queueMinos[i]);
+                queueBoxes[i] = transform.Find("Preview" + (i + 1)).gameObject;
             }
 
-            var minoPreview = ShowPreview(tetris.PeekNextMino(i), queueBoxes[i]);
-            queueMinos[i] = minoPreview.gameObject;
-        }
-    }
+            swapBox = transform.Find("HoldPreview").gameObject;
 
-    private void OnHeldMinoChanged()
-    {
-        if (swapMino != null)
+            OnQueueChanged(); // manual first fill
+        }
+
+        private void OnQueueChanged()
         {
-            Destroy(swapMino.gameObject);
+            for (int i = 0; i < tetris.QueueSize; i++)
+            {
+                if (queueMinos[i] != null)
+                {
+                    Destroy(queueMinos[i]);
+                }
+
+                var minoPreview = ShowPreview(tetris.PeekNextMino(i), queueBoxes[i]);
+                queueMinos[i] = minoPreview.gameObject;
+            }
         }
 
-        var minoPreview = ShowPreview(grid.HeldMino, swapBox);
-        swapMino = minoPreview.gameObject;
-    }
+        private void OnHeldMinoChanged()
+        {
+            if (swapMino != null)
+            {
+                Destroy(swapMino.gameObject);
+            }
 
-    private MinoScript ShowPreview(MinoScript mino, GameObject box)
-    {
-        var minoPreview = Instantiate(mino.gameObject);
-        var minoPreviewScript = minoPreview.GetComponent<MinoScript>();
-        minoPreview.SetActive(true);
-        minoPreview.transform.SetParent(box.transform, false);
-        minoPreview.transform.localPosition = -scaleFactor * minoPreviewScript.Anchor;
-        minoPreview.transform.localScale = scaleFactor * Vector3.one;
-        return minoPreviewScript;
+            var minoPreview = ShowPreview(grid.HeldMino, swapBox);
+            swapMino = minoPreview.gameObject;
+        }
+
+        private MinoScript ShowPreview(MinoScript mino, GameObject box)
+        {
+            var minoPreview = Instantiate(mino.gameObject);
+            var minoPreviewScript = minoPreview.GetComponent<MinoScript>();
+            minoPreview.SetActive(true);
+            minoPreview.transform.SetParent(box.transform, false);
+            minoPreview.transform.localPosition = -scaleFactor * minoPreviewScript.Anchor;
+            minoPreview.transform.localScale = scaleFactor * Vector3.one;
+            return minoPreviewScript;
+        }
     }
 }

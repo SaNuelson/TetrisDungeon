@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Util
 {
-    public static class Util
+    public static class Utils
     {
 
         public static Texture2D CreateSolidTexture(int width, int height, Color color)
@@ -76,7 +76,7 @@ namespace Assets.Scripts
 
             public override T Get()
             {
-                return this.items[UnityEngine.Random.Range(0, items.Length)];
+                return items[UnityEngine.Random.Range(0, items.Length)];
             }
         }
 
@@ -134,7 +134,7 @@ namespace Assets.Scripts
             public MultiBagStrategy(T[] items, int numOfBags)
             {
                 this.items = items;
-                this.bags = new BagStrategy[numOfBags];
+                bags = new BagStrategy[numOfBags];
                 for (int i = 0; i < bags.Length; i++)
                     bags[i] = new BagStrategy(items);
             }
@@ -204,10 +204,10 @@ namespace Assets.Scripts
 
         private void AssembleDictionary()
         {
-            foreach(var sprite in spriteGroup)
+            foreach (var sprite in spriteGroup)
             {
-                if ((type == SpriteManagerType.Quad && sprite.name.Length != 4) ||
-                    (type == SpriteManagerType.Oct && sprite.name.Length != 8))
+                if (type == SpriteManagerType.Quad && sprite.name.Length != 4 ||
+                    type == SpriteManagerType.Oct && sprite.name.Length != 8)
                 {
                     Debug.LogError("Invalid name format of sprite " + sprite.name + " for manager of type " + type);
                     continue;

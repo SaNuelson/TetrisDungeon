@@ -32,6 +32,11 @@ public class PlayerScript : MonoBehaviour
         UpdateAnimation();
     }
 
+    public void OnEnd()
+    {
+        print("ONEND");
+    }
+
     private void UpdateAnimation()
     {
         while (lineFillTimes.Count > 0 && lineFillTimes[0] <= Time.time - ComboTimeFrame)
