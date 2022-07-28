@@ -4,28 +4,38 @@ using UnityEngine;
 
 public class BlockScript : MonoBehaviour
 {
-    public Color ForegroundColor
+    private void Awake()
     {
-        get => _foregroundColor;
-        set
-        {
-            _foregroundColor = value;
-            _foregroundSprite.color = value;
-        }
+        renderer = GetComponent<SpriteRenderer>();
+        if(renderer == null)
+            renderer = gameObject.AddComponent<SpriteRenderer>();
+        renderer.sortingLayerName = "Tetris Mainground";
+        color = renderer.color;
     }
-    public Color BackgroundColor
+
+    public Color Color
     {
-        get => _backgroundColor;
+        get => color;
         set
         {
-            _backgroundColor = value;
-            _backgroundSprite.color = value;
+            color = value;
+            if (renderer == null)
+                renderer = gameObject.AddComponent<SpriteRenderer>();
+            renderer.color = value;
         }
     }
 
-    [SerializeField] private Color _foregroundColor;
-    [SerializeField] private Color _backgroundColor;
+    public Sprite Sprite
+    {
+        get => renderer.sprite;
+        set
+        {
+            if (renderer == null)
+                renderer = gameObject.AddComponent<SpriteRenderer>();
+            renderer.sprite = value;
+        }
+    }
 
-    [SerializeField] private SpriteRenderer _foregroundSprite;
-    [SerializeField] private SpriteRenderer _backgroundSprite;
+    [SerializeField] private Color color;
+    [SerializeField] private SpriteRenderer renderer;
 }

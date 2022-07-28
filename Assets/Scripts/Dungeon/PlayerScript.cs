@@ -37,7 +37,7 @@ public class PlayerScript : MonoBehaviour
         while (lineFillTimes.Count > 0 && lineFillTimes[0] <= Time.time - ComboTimeFrame)
             lineFillTimes.RemoveAt(0);
 
-        print("Combo = " + lineFillTimes.Count);
+        //print("Combo = " + lineFillTimes.Count);
 
         animator.SetInteger("combo", lineFillTimes.Count);
         

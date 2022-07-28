@@ -135,8 +135,7 @@ public class GridManager : MonoBehaviour
         // TODO: Make shadows properly
         foreach(var block in ActiveMinoShadow.Blocks)
         {
-            block.Block.BackgroundColor = Color.black;
-            block.Block.ForegroundColor = Color.gray;
+            block.Block.Color = Color.gray;
         }
 
         ResetShadow();

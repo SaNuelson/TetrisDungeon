@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,28 +23,50 @@ public class MinoScript : MonoBehaviour
 
     public Vector3 Anchor => new Vector3(Preset.Anchor.x, Preset.Anchor.y, 0);
 
-    public void ConstructFromPreset(MinoPreset preset, GameObject blockPrefab)
+    public void ConstructFromPreset(MinoPreset preset, Sprite[] BlockSprites)
     {
         if (_isConstructed)
         {
             Debug.LogError("TetrominoScript.Construct -- already constructed");
+            return;
         }
 
         Blocks = new MinoBlockDto[preset.Offsets.Length];
         gameObject.name = preset.Name;
         Preset = preset;
 
+        var fillMap = new bool[preset.BoxSize.x, preset.BoxSize.y];
+        foreach (var offset in preset.Offsets)
+            fillMap[offset.x, offset.y] = true;
+
         for (int i = 0; i < preset.Offsets.Length; i++)
         {
-            var newBlock = Instantiate(blockPrefab);
+            var newBlock = new GameObject("NewTile");
+            var newBlockScript = newBlock.AddComponent<BlockScript>();
             var blockOffset = preset.Offsets[i];
-            var newBlockScript = newBlock.GetComponent<BlockScript>();
 
             newBlock.transform.SetParent(transform, false);
-            newBlock.transform.position += new Vector3(blockOffset.x, blockOffset.y, 0); // TODO: Account for block size
+            newBlock.transform.position += new Vector3(blockOffset.x, blockOffset.y, 0);
 
-            newBlockScript.ForegroundColor = preset.ForegroundColor;
-            newBlockScript.BackgroundColor = preset.BackgroundColor;
+            bool hasTopEdge = blockOffset.y >= preset.BoxSize.y - 1 || !fillMap[blockOffset.x, blockOffset.y + 1];
+            bool hasBotEdge = blockOffset.y <= 0 || !fillMap[blockOffset.x, blockOffset.y - 1];
+            bool hasLeftEdge = blockOffset.x <= 0 || !fillMap[blockOffset.x - 1, blockOffset.y];
+            bool hasRightEdge = blockOffset.x >= preset.BoxSize.x - 1 || !fillMap[blockOffset.x + 1, blockOffset.y];
+
+            string seekedName = (hasTopEdge ? "0" : "1")
+                + (hasRightEdge ? "0" : "1")
+                + (hasBotEdge ? "0" : "1") 
+                + (hasLeftEdge ? "0" : "1");
+
+            newBlockScript.Color = preset.ForegroundColor;
+            foreach(var sprite in BlockSprites)
+            {
+                if (sprite.name == seekedName)
+                {
+                    newBlockScript.Sprite = sprite;
+                    break;
+                }
+            }
 
             Blocks[i] = new MinoBlockDto()
             {
@@ -52,33 +75,47 @@ public class MinoScript : MonoBehaviour
             };
         }
 
-        //// Box debug
-        //for (int x = 0; x < preset.BoxSize.x; x++)
-        //{
-        //    for (int y = 0; y < preset.BoxSize.y; y++)
-        //    {
-        //        var newBlock = Instantiate(blockPrefab);
-        //        var newBlockScript = newBlock.GetComponent<BlockScript>();
+        _isConstructed = true;
+    }
 
-        //        newBlock.transform.SetParent(transform, false);
-        //        newBlock.transform.position += new Vector3(x, y, 1);
+    public void ConstructPreview(MinoPreset preset)
+    {
+        if (_isConstructed)
+        {
+            Debug.LogError("TetrominoScript.Construct -- already constructed");
+            return;
+        }
 
-        //        newBlockScript.ForegroundColor = Color.white;
-        //        newBlockScript.BackgroundColor = Color.gray;
-        //    }
-        //}
+        Blocks = new MinoBlockDto[preset.Offsets.Length];
+        gameObject.name = preset.Name;
+        Preset = preset;
 
-        //// Center-point debug
-        //var centerBlock = Instantiate(blockPrefab);
-        //centerBlock.transform.SetParent(transform, false);
-        //centerBlock.transform.position = new Vector3(preset.Anchor.x, preset.Anchor.y, 0);
-        //var centerBlockScript = centerBlock.GetComponent<BlockScript>();
-        //centerBlockScript.BackgroundColor = Color.black;
-        //centerBlockScript.ForegroundColor = Color.red;
-        //centerBlock.transform.localScale = 0.5f * Vector3.one;
+        var fillMap = new bool[preset.BoxSize.x, preset.BoxSize.y];
+        foreach (var offset in preset.Offsets)
+            fillMap[offset.x, offset.y] = true;
+
+        for (int i = 0; i < preset.Offsets.Length; i++)
+        {
+            var newBlock = new GameObject("NewTile");
+            var newBlockScript = newBlock.AddComponent<BlockScript>();
+            var blockOffset = preset.Offsets[i];
+
+            newBlock.transform.SetParent(transform, false);
+            newBlock.transform.position += new Vector3(blockOffset.x, blockOffset.y, 0);
+
+            newBlockScript.Color = preset.ForegroundColor;
+            newBlockScript.Sprite = Sprite.Create(Util.CreateSolidTexture(100, 100, Color.yellow), new Rect(0, 0, 100, 100), new Vector2(0.5f, 0.5f));
+
+            Blocks[i] = new MinoBlockDto()
+            {
+                Block = newBlockScript,
+                Offset = blockOffset
+            };
+        }
 
         _isConstructed = true;
     }
+
     public void Move(Vector2Int direction)
     {
         transform.position += new Vector3(direction.x, direction.y, 0);
@@ -116,6 +153,7 @@ public class MinoScript : MonoBehaviour
 
             block.Offset = new Vector2Int((int)newBlockBaseOffset.x, (int)newBlockBaseOffset.y);
             block.Block.transform.position += new Vector3(newBlockCenterOffset.x - oldBlockCenterOffset.x, newBlockCenterOffset.y - oldBlockCenterOffset.y, 0);
+            block.Block.transform.eulerAngles -= Vector3.forward * 90;
         }
     }
 
@@ -145,16 +183,16 @@ public class MinoScript : MonoBehaviour
         return rotatedOffsets;
     }
 
-    private void OnDrawGizmos()
-    {
-        var botleft = transform.position - new Vector3(.5f, .5f, 0);
-        var botright = new Vector3(botleft.x + Preset.BoxSize.x, botleft.y);
-        var topleft = new Vector3(botleft.x, botleft.y + Preset.BoxSize.y);
-        var topright = new Vector3(botright.x, topleft.y);
+    //private void OnDrawGizmos()
+    //{
+    //    var botleft = transform.position - new Vector3(.5f, .5f, 0);
+    //    var botright = new Vector3(botleft.x + Preset.BoxSize.x, botleft.y);
+    //    var topleft = new Vector3(botleft.x, botleft.y + Preset.BoxSize.y);
+    //    var topright = new Vector3(botright.x, topleft.y);
 
-        Gizmos.DrawLine(topleft, topright);
-        Gizmos.DrawLine(topright, botright);
-        Gizmos.DrawLine(botright, botleft);
-        Gizmos.DrawLine(botleft, topleft);
-    }
+    //    Gizmos.DrawLine(topleft, topright);
+    //    Gizmos.DrawLine(topright, botright);
+    //    Gizmos.DrawLine(botright, botleft);
+    //    Gizmos.DrawLine(botleft, topleft);
+    //}
 }
