@@ -6,7 +6,7 @@ A hobby project aiming to connect game mechanics of Tetris with widely popular g
 
 ## Now featuring!
 
-~~ _for better experience read in an enthusiastic announcer voice_ ~~
+_for better experience read in an enthusiastic announcer voice_
 
 A lot of stuff I always wanted to try out, namely:
 
@@ -17,6 +17,10 @@ A lot of stuff I always wanted to try out, namely:
 - Custom editor which enables to create and preview tiled structures (with automatically updated sprites)
 
 ![](./ReadmeRes/Inventory.gif)
+
+- The editor also support octal neigborhoods (including diagonals)
+
+![](./ReadmeRes/OctoMinos.gif)
 
 ## Yet to feature!
 
