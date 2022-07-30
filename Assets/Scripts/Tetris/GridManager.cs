@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,6 +13,13 @@ namespace Assets.Scripts.Tetris
         [Tooltip("Time for block to fall in seconds")]
         public float GameSpeed = 1f;
 
+        [Tooltip("Time delay between movements when key is held down")]
+        public float InputDelay = .2f;
+
+        private KeyCode LastInput = KeyCode.None;
+        private float InputDelayLeft;
+
+
         public Vector2Int GridSize = new Vector2Int(8, 16);
 
         public bool EnableKickFlip = true;
@@ -22,13 +30,14 @@ namespace Assets.Scripts.Tetris
         public KeyCode RotateMinoCounterClockwiseKey = KeyCode.R;
         public KeyCode HoldMinoKey = KeyCode.F;
 
-        [Header("Runtime")]
+        [Header("Runtime (Read-only)")]
         public bool IsRunning = true;
 
         public MinoScript ActiveMino = null;
         public MinoScript ActiveMinoShadow = null;
 
         public MinoScript HeldMino = null;
+        public bool canHoldout = true;
 
         public UnityEvent MinoFallen = new UnityEvent();
         public UnityEvent LineCleared = new UnityEvent();
@@ -45,6 +54,13 @@ namespace Assets.Scripts.Tetris
                 Step();
             }
         }
+        
+        private void ResetTetrisClock()
+        {
+            StopCoroutine(_tetrisClock);
+            _tetrisClock = RunTetrisClock();
+            StartCoroutine(_tetrisClock);
+        }
 
         private BlockScript[,] grid;
 
@@ -57,29 +73,52 @@ namespace Assets.Scripts.Tetris
             MinoFallen.AddListener(OnMinoFallen);
 
             _tetrisClock = RunTetrisClock();
+            Step(); // manual first step
             StartCoroutine(_tetrisClock);
+
+            InputDelayLeft = InputDelay;
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            bool acceptHeldInput = false; // delay left <= 0 OR input changed
+            if (Input.GetKey(LastInput))
+            {
+                InputDelayLeft -= Time.deltaTime;
+                if (InputDelayLeft <= 0)
+                {
+                    InputDelayLeft = InputDelay;
+                    acceptHeldInput = true;
+                }
+            }
+            else
+            {
+                InputDelayLeft = InputDelay;
+                acceptHeldInput = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftArrow) 
+                || (acceptHeldInput && Input.GetKey(KeyCode.LeftArrow)))
             {
                 TryMoveMino(Vector2Int.left);
+                LastInput = KeyCode.LeftArrow;
             }
 
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKeyDown(KeyCode.RightArrow)
+                || (acceptHeldInput && Input.GetKey(KeyCode.RightArrow)))
             {
                 TryMoveMino(Vector2Int.right);
+                LastInput = KeyCode.RightArrow;
             }
 
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if ( Input.GetKeyDown(KeyCode.DownArrow) 
+                || (acceptHeldInput && Input.GetKey(KeyCode.DownArrow)))
             {
+                LastInput = KeyCode.DownArrow;
                 var collided = !TryMoveMino(Vector2Int.down);
                 if (collided)
                     FreeMino();
-                StopCoroutine(_tetrisClock);
-                _tetrisClock = RunTetrisClock();
-                StartCoroutine(_tetrisClock);
+                ResetTetrisClock();
             }
 
             if (Input.GetKeyDown(DropMinoKey))
@@ -151,11 +190,16 @@ namespace Assets.Scripts.Tetris
 
         public void SwapMino()
         {
+            if (!canHoldout)
+                return;
+
             var nextMino = HeldMino;
             HeldMino = ActiveMino;
+            ActiveMino = null;
             HeldMino.gameObject.SetActive(false);
             Destroy(ActiveMinoShadow.gameObject);
             SpawnMino(nextMino);
+            canHoldout = false;
             HeldMinoChanged.Invoke();
         }
 
@@ -338,6 +382,7 @@ namespace Assets.Scripts.Tetris
 
         public void OnMinoFallen()
         {
+            canHoldout = true;
             FreeRows();
             SpawnMino();
         }

@@ -932,7 +932,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1366429375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1036,11 +1036,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2048665982534732258, guid: 05abaeaf63254fa478827f8a380e6112, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.05
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2048665982534732258, guid: 05abaeaf63254fa478827f8a380e6112, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.38
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 2048665982534732258, guid: 05abaeaf63254fa478827f8a380e6112, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1238,6 +1238,10 @@ PrefabInstance:
     - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
       propertyPath: QueueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317031154446574, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: IsRunning
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 438317031154446574, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
       propertyPath: LineCleared.m_PersistentCalls.m_Calls.Array.data[0].m_Target

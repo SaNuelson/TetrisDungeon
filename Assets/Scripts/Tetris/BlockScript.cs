@@ -9,11 +9,11 @@ namespace Assets.Scripts.Tetris
         private void Awake()
         {
 
-            renderer = GetComponent<SpriteRenderer>();
-            if (renderer == null)
-                renderer = gameObject.AddComponent<SpriteRenderer>();
-            renderer.sortingLayerName = "Tetris Mainground";
-            color = renderer.color;
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+                spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+            spriteRenderer.sortingLayerName = "Tetris Mainground";
+            color = spriteRenderer.color;
         }
 
         public Color Color
@@ -22,24 +22,24 @@ namespace Assets.Scripts.Tetris
             set
             {
                 color = value;
-                if (renderer == null)
-                    renderer = gameObject.AddComponent<SpriteRenderer>();
-                renderer.color = value;
+                if (spriteRenderer == null)
+                    spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+                spriteRenderer.color = value;
             }
         }
 
         public Sprite Sprite
         {
-            get => renderer.sprite;
+            get => spriteRenderer.sprite;
             set
             {
-                if (renderer == null)
-                    renderer = gameObject.AddComponent<SpriteRenderer>();
-                renderer.sprite = value;
+                if (spriteRenderer == null)
+                    spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = value;
             }
         }
 
         [SerializeField] private Color color;
-        [SerializeField] private SpriteRenderer renderer;
+        [SerializeField] private SpriteRenderer spriteRenderer;
     }
 }

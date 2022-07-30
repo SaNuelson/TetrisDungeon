@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Assets.Scripts.Util;
 
 namespace Assets.Scripts.Tetris
 {
