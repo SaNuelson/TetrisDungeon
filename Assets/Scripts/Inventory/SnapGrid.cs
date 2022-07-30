@@ -9,20 +9,19 @@ public class SnapGrid : MonoBehaviour
     public Vector2Int GridSize;
 
     public Sprite[] SpriteGroup;
-    private TileSpriteManager spritePicker;
+    public TileManagerType TileType;
+
+    private TileManager tileFactory;
 
     [SerializeField] private bool[] Grid;
     [SerializeField] private GameObject[,] blockGrid;
 
-    private void Update()
+    public void Reassemble(bool force = false)
     {
-    }
-
-    public void Reassemble()
-    {
-        if (spritePicker == null)
+        Debug.Log("REASSEMBLE");
+        if (tileFactory == null || force)
         {
-            spritePicker = new TileSpriteManager(SpriteGroup, SpriteManagerType.Quad);
+            tileFactory = new TileManager(SpriteGroup, TileType);
         }
 
         if (blockGrid == null || blockGrid.GetLength(0) != GridSize.x || blockGrid.GetLength(1) != GridSize.y)
@@ -51,10 +50,7 @@ public class SnapGrid : MonoBehaviour
 
         if (shouldExist && !doesExist)
         {
-            var newBlock = new GameObject("Block");
-            var blockSpriteRenderer = newBlock.AddComponent<SpriteRenderer>();
-            var blockSprite = spritePicker.GetSprite(HasBlock(x, y + 1), HasBlock(x - 1, y), HasBlock(x + 1, y), HasBlock(x, y - 1));
-            blockSpriteRenderer.sprite = Instantiate(blockSprite);
+            GameObject newBlock = tileFactory.GetTile(GetTileName(x, y));
             newBlock.transform.SetParent(transform, false);
             newBlock.transform.localPosition = new Vector2(x, y);
             blockGrid[x, y] = newBlock;
@@ -68,10 +64,38 @@ public class SnapGrid : MonoBehaviour
         {
             var block = blockGrid[x, y];
             var blockSpriteRenderer = block.GetComponent<SpriteRenderer>();
-            var expectedName = spritePicker.GetSpriteName(HasBlock(x, y + 1), HasBlock(x - 1, y), HasBlock(x + 1, y), HasBlock(x, y - 1));
+            var expectedName = GetTileName(x, y);
             if (blockSpriteRenderer.sprite.name != expectedName)
             {
-                blockSpriteRenderer.sprite = spritePicker.GetSprite(expectedName);
+                MonoBehaviour.DestroyImmediate(block);
+                var newBlock = tileFactory.GetTile(expectedName);
+                newBlock.transform.SetParent(transform, false);
+                newBlock.transform.localPosition = new Vector2(x, y);
+                blockGrid[x, y] = newBlock;
+            }
+        }
+
+        string GetTileName(int x, int y)
+        {
+            if (TileType == TileManagerType.Quad)
+            {
+                return tileFactory.GetTileName(
+                    HasBlock(x, y + 1),
+                    HasBlock(x + 1, y),
+                    HasBlock(x, y - 1),
+                    HasBlock(x - 1, y));
+            }
+            else
+            {
+                return tileFactory.GetTileName(
+                    HasBlock(x, y + 1),
+                    HasBlock(x + 1, y + 1),
+                    HasBlock(x + 1, y),
+                    HasBlock(x + 1, y - 1),
+                    HasBlock(x, y - 1),
+                    HasBlock(x - 1, y - 1),
+                    HasBlock(x - 1, y),
+                    HasBlock(x - 1, y + 1));
             }
         }
 

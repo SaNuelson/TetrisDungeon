@@ -338,6 +338,118 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tetris
       objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[2].Name
+      value: J
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Name
+      value: test
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Anchor.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Anchor.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].BoxSize.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].BoxSize.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].BackgroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].BackgroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].BackgroundColor.g
+      value: 0.036205325
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].BackgroundColor.r
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].ForegroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].ForegroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].ForegroundColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].ForegroundColor.r
+      value: 0.60851693
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[3].Offsets.Array.data[3].x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[5].Offsets.Array.data[3].x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[1].x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[2].x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[2].y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[3].x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[3].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[4].x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[4].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[5].x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[5].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 438317030564433781, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
+      propertyPath: MinoPresets.Array.data[7].Offsets.Array.data[6].y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 438317031154446574, guid: 6ba26ce04a86e4f43b0b8a91dd8a2465, type: 3}
       propertyPath: LineCleared.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

@@ -49,7 +49,7 @@ namespace Assets.Scripts.Tetris
                 var blockOffset = preset.Offsets[i];
 
                 newBlock.transform.SetParent(transform, false);
-                newBlock.transform.position += new Vector3(blockOffset.x, blockOffset.y, 0);
+                newBlock.transform.localPosition += new Vector3(blockOffset.x, blockOffset.y, 0);
 
                 bool hasTopEdge = blockOffset.y >= preset.BoxSize.y - 1 || !fillMap[blockOffset.x, blockOffset.y + 1];
                 bool hasBotEdge = blockOffset.y <= 0 || !fillMap[blockOffset.x, blockOffset.y - 1];
@@ -121,7 +121,7 @@ namespace Assets.Scripts.Tetris
 
         public void Move(Vector2Int direction)
         {
-            transform.position += new Vector3(direction.x, direction.y, 0);
+            transform.localPosition += new Vector3(direction.x, direction.y, 0);
             BasePosition += direction;
         }
 
@@ -130,7 +130,7 @@ namespace Assets.Scripts.Tetris
             Vector2Int baseOffset = newBasePosition - BasePosition;
             foreach (var block in Blocks)
             {
-                block.Block.transform.position += new Vector3(baseOffset.x, baseOffset.y, 0);
+                block.Block.transform.localPosition += new Vector3(baseOffset.x, baseOffset.y, 0);
             }
             BasePosition = newBasePosition;
         }
@@ -155,7 +155,7 @@ namespace Assets.Scripts.Tetris
                 Assert.AreEqual(newBlockBaseOffset.y % 1, 0);
 
                 block.Offset = new Vector2Int((int)newBlockBaseOffset.x, (int)newBlockBaseOffset.y);
-                block.Block.transform.position += new Vector3(newBlockCenterOffset.x - oldBlockCenterOffset.x, newBlockCenterOffset.y - oldBlockCenterOffset.y, 0);
+                block.Block.transform.localPosition += new Vector3(newBlockCenterOffset.x - oldBlockCenterOffset.x, newBlockCenterOffset.y - oldBlockCenterOffset.y, 0);
                 block.Block.transform.eulerAngles -= Vector3.forward * 90;
             }
         }

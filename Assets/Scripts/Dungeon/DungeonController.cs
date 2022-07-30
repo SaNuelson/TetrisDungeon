@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class DungeonController : MonoBehaviour
 {
-    public Sprite[] TileSprites;
+    public Level CurrentLevel;
 
 
-    public static GameObject GenerateDungeon(int width, int height)
-    {
-        return null;
-    }
+}
+
+public class Level
+{
+    public int[,] Grid;
+    public Room[] Rooms;
+}
+
+public class Room
+{
+
 }

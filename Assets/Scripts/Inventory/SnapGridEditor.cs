@@ -7,6 +7,8 @@ public class SnapGridEditor : Editor
     SerializedProperty gridSizeProp;
     SerializedProperty gridProp;
     SerializedProperty spriteGroupProp;
+    SerializedProperty tileTypeProp;
+    SerializedProperty tileManagerProp;
 
     Vector2 scrollPos;
 
@@ -15,6 +17,8 @@ public class SnapGridEditor : Editor
         gridSizeProp = serializedObject.FindProperty("GridSize");
         gridProp = serializedObject.FindProperty("Grid");
         spriteGroupProp = serializedObject.FindProperty("SpriteGroup");
+        tileTypeProp = serializedObject.FindProperty("TileType");
+        tileManagerProp = serializedObject.FindProperty("tileFactory");
     }
 
     public override void OnInspectorGUI()
@@ -23,15 +27,16 @@ public class SnapGridEditor : Editor
         
         EditorGUILayout.PropertyField(gridSizeProp);
         EditorGUILayout.PropertyField(spriteGroupProp);
-        DrawGrid();
+        EditorGUILayout.PropertyField(tileTypeProp);
+        bool force = DrawGrid();
 
         serializedObject.ApplyModifiedProperties();
 
         if (GUI.changed)
-            (target as SnapGrid).Reassemble();
+            (target as SnapGrid).Reassemble(force);
     }
 
-    private void DrawGrid()
+    private bool DrawGrid()
     {
         Vector2Int gridSize = gridSizeProp.vector2IntValue;
         gridProp.arraySize = gridSize.x * gridSize.y;
@@ -53,8 +58,14 @@ public class SnapGridEditor : Editor
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Fill")) FillGrid();
         if (GUILayout.Button("Erase")) ClearGrid();
-        if (GUILayout.Button("Force Reset")) ForceReset();
+        bool force = false;
+        if (GUILayout.Button("Force Reset"))
+        {
+            ForceReset();
+            force = true;
+        }
         EditorGUILayout.EndHorizontal();
+        return force;
     }
 
     private void FillGrid()

@@ -8,6 +8,7 @@ namespace Assets.Scripts.Tetris
     {
         private void Awake()
         {
+
             renderer = GetComponent<SpriteRenderer>();
             if (renderer == null)
                 renderer = gameObject.AddComponent<SpriteRenderer>();

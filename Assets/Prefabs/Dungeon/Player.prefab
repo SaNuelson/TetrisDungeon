@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 5509786732591685906}
   - component: {fileID: 4635279721975168522}
   - component: {fileID: 4570823579970815412}
+  - component: {fileID: 7885643434961127760}
+  - component: {fileID: 6466846255515765055}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -116,10 +118,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180ebb50472c3bb48b17437066bf0b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaximumHealth: 0
-  CurrentHealth: 0
-  AttackPower: 0
-  ComboTimeFrame: 1
+  Combatable: {fileID: 7885643434961127760}
+  Target: {fileID: 0}
+--- !u!114 &7885643434961127760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4570823579970815413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7293889c914ac458785b36dfae2cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 100
+  currentHealth: 0
+  MinAttackDamage: 5
+  MaxAttackDamage: 10
+  HealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    OldValue: 0
+    NewValue: 0
+--- !u!114 &6466846255515765055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4570823579970815413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ab6d31ba8293141a90d0ab4660f3b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FlyingText: {fileID: 7396228250861611680, guid: f0a5d5fb9bc6eb040a4b8488c1ff9d17, type: 3}
+  HitAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 6.6666684
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.14999996
+      value: 1
+      inSlope: 6.6666684
+      outSlope: -1.1764705
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.20421082
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1.1764705
+      outSlope: -5.3773136
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.042105615
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  HitShowTime: 0.3
 --- !u!1001 &1537778418389103573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -213,7 +281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4511942458270972104, guid: bfaddfed0ceda2549bbcd6cf55e6c62d, type: 3}
       propertyPath: m_Name
-      value: Stats
+      value: StatsInfo
       objectReference: {fileID: 0}
     - target: {fileID: 4725961584908032455, guid: bfaddfed0ceda2549bbcd6cf55e6c62d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -227,6 +295,10 @@ PrefabInstance:
       propertyPath: m_TargetGraphic
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6842246999210992833, guid: bfaddfed0ceda2549bbcd6cf55e6c62d, type: 3}
+      propertyPath: Combatable
+      value: 
+      objectReference: {fileID: 7885643434961127760}
     - target: {fileID: 8024615285668602600, guid: bfaddfed0ceda2549bbcd6cf55e6c62d, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

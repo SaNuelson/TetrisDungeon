@@ -1,19 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Animator))]
 public class PlayerScript : MonoBehaviour
 {
+    public Combatable Combatable;
+    public Combatable Target;
+
     private Animator animator;
 
-    public float MaximumHealth;
-    public float CurrentHealth;
-
-    public float AttackPower;
-
-    private List<float> lineFillTimes = new List<float>();
-    public float ComboTimeFrame = 1f;
+    private int comboCounter = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -21,30 +20,16 @@ public class PlayerScript : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void Update()
+    public void OnTriggerAttack()
     {
-        UpdateAnimation();
+        comboCounter++;
+        animator.SetInteger("combo", comboCounter);
+        Combatable.InflictDamage(Target);
     }
 
-    public void OnAttack()
+    public void OnAttackEnd()
     {
-        lineFillTimes.Add(Time.time);
-        UpdateAnimation();
-    }
-
-    public void OnEnd()
-    {
-        print("ONEND");
-    }
-
-    private void UpdateAnimation()
-    {
-        while (lineFillTimes.Count > 0 && lineFillTimes[0] <= Time.time - ComboTimeFrame)
-            lineFillTimes.RemoveAt(0);
-
-        //print("Combo = " + lineFillTimes.Count);
-
-        animator.SetInteger("combo", lineFillTimes.Count);
-        
+        comboCounter--;
+        animator.SetInteger("combo", comboCounter);
     }
 }

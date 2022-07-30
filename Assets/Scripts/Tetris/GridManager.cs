@@ -41,8 +41,8 @@ namespace Assets.Scripts.Tetris
         {
             while (IsRunning)
             {
-                Step();
                 yield return new WaitForSeconds(GameSpeed);
+                Step();
             }
         }
 
@@ -77,6 +77,9 @@ namespace Assets.Scripts.Tetris
                 var collided = !TryMoveMino(Vector2Int.down);
                 if (collided)
                     FreeMino();
+                StopCoroutine(_tetrisClock);
+                _tetrisClock = RunTetrisClock();
+                StartCoroutine(_tetrisClock);
             }
 
             if (Input.GetKeyDown(DropMinoKey))
@@ -102,7 +105,6 @@ namespace Assets.Scripts.Tetris
         {
             if (ActiveMino == null)
             {
-                print("TV2: Step -- no mino, spawning");
                 SpawnMino();
                 return;
             }
@@ -111,12 +113,16 @@ namespace Assets.Scripts.Tetris
             if (collided)
             {
                 FreeMino();
-                SpawnMino();
             }
         }
 
         public void SpawnMino(MinoScript customMino = null)
         {
+            if (ActiveMino != null)
+            {
+                Debug.LogError("SpawnMino -- active mino exists");
+            }
+
             if (customMino != null)
                 ActiveMino = customMino;
             else
@@ -128,7 +134,7 @@ namespace Assets.Scripts.Tetris
 
             var gridOffset = new Vector3(0, GridSize.y / 2f, 0);
             var blockOffset = new Vector3(0.5f, 0.5f, 0); // TODO: do properly
-            ActiveMino.transform.position = transform.position + gridOffset + blockOffset;
+            ActiveMino.transform.localPosition = transform.localPosition + gridOffset + blockOffset;
 
             ActiveMinoShadow = Instantiate(ActiveMino);
             ActiveMinoShadow.gameObject.name += " Shadow";
@@ -206,7 +212,7 @@ namespace Assets.Scripts.Tetris
                     for (int x = 0; x < GridSize.x; x++)
                     {
                         if (grid[x, yy] != null)
-                            grid[x, yy].transform.position += Vector3.down; // TODO: properly
+                            grid[x, yy].transform.localPosition += Vector3.down; // TODO: properly
 
                         grid[x, yy - 1] = grid[x, yy];
                     }
@@ -226,7 +232,6 @@ namespace Assets.Scripts.Tetris
 
             if (!CanMove(ActiveMino, direction))
             {
-                print("TV2: Move collided");
                 return false;
             }
 
@@ -245,7 +250,6 @@ namespace Assets.Scripts.Tetris
 
             if (!CanRotate(ActiveMino, clockwise))
             {
-                print("TV2: Rotate collided");
                 if (EnableKickFlip)
                     return TryKickRotateMino(clockwise);
                 return false;
