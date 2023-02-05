@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06cfa6f7deceb4049973eb8c5647cd41, type: 3}
+  m_Name: I Mino
+  m_EditorClassIdentifier: 
+  Name: I
+  Color: {r: 1, g: 0.26132536, b: 0, a: 1}
+  BoxSize: {x: 4, y: 4}
+  Offsets:
+  - {x: 1, y: 0}
+  - {x: 1, y: 1}
+  - {x: 1, y: 2}
+  - {x: 1, y: 3}
+  Anchor: {x: 1.5, y: 1.5}

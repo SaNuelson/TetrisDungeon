@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2471986832796747984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2471986832796747986}
+  - component: {fileID: 2471986832796747985}
+  m_Layer: 0
+  m_Name: TileFactoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2471986832796747986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2471986832796747984}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.6609678, y: 0.7719229, z: -18.165203}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2471986832796747985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2471986832796747984}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c19d7c8c461a84d8721fa04366ca43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FactoryPresets:
+  - Name: MinoTilePlaceholders
+    Type: 0
+    Sprites:
+    - {fileID: 1807125615787039003, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: 1639214462598301798, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: 2157240733274199957, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: -4202638810691693305, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: 349823833441268365, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: -6614373457484812694, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: 4798128000316562087, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: -7995846982363831464, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: -4672163745296329812, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: -5012251703786577423, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: -7708644975649761358, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: 4239528737361974724, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: -8305803365058092108, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: 5541110501864291823, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: -1530080802165054831, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+    - {fileID: 5560954434011818755, guid: d6cbe91f9a2b65c459b145a65b2ccdf4, type: 3}
+  - Name: JewelTiles
+    Type: 1
+    Sprites:
+    - {fileID: 21300000, guid: a0d9d8dd7ba0e7c419786e5e4d7e1a76, type: 3}
+    - {fileID: 21300000, guid: ee544e7e5ad0ceb439b38fc40b6cd6f5, type: 3}
+    - {fileID: 21300000, guid: b9ca1d2dd2135024dac8c863b3ed2782, type: 3}
+    - {fileID: 21300000, guid: f1687933ca3c28040bc93cb4edb02938, type: 3}
+    - {fileID: 21300000, guid: caa5dc27b1b617a4bbf094b63638ddff, type: 3}
+    - {fileID: 21300000, guid: 567edd98f2ea2f84782228993de5c5b4, type: 3}
+    - {fileID: 21300000, guid: 638a6d9c8947a0b409877a987ed7fb8f, type: 3}
+    - {fileID: 21300000, guid: b000651ab52e50a4eb4eb6d70b7b85e2, type: 3}
+    - {fileID: 21300000, guid: 29b2a263d9eb80e49bab8bd195c96a6d, type: 3}
+    - {fileID: 21300000, guid: 4d12e16901b17e646bd5f80a0cf593e1, type: 3}
+    - {fileID: 21300000, guid: 9ca90488e52ad074483189a13f15a452, type: 3}
+    - {fileID: 21300000, guid: e884c481c30ca034193a4fc8b98c40e0, type: 3}
+    - {fileID: 21300000, guid: a157c01b0d2477049bc563fee696a19f, type: 3}
+    - {fileID: 21300000, guid: 0ce862e1b7b5a15488b87e50b942f563, type: 3}
+    - {fileID: 21300000, guid: 168fcc3859461144fa55fae515bc21d8, type: 3}
+    - {fileID: 21300000, guid: e2d6c35b123a3f34ab04af4a602741bd, type: 3}
+    - {fileID: 21300000, guid: 9dc86859dc0d1e94bb6e27e0385ac7fa, type: 3}
+    - {fileID: 21300000, guid: 8f85306f6efa62c4397492c75713a1ca, type: 3}

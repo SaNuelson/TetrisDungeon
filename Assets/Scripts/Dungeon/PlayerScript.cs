@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Animator))]
 public class PlayerScript : MonoBehaviour
 {
-    public Combatable Combatable;
+    public Combatable Self;
     public Combatable Target;
 
     private Animator animator;
@@ -24,10 +24,14 @@ public class PlayerScript : MonoBehaviour
     {
         comboCounter++;
         animator.SetInteger("combo", comboCounter);
-        Combatable.InflictDamage(Target);
     }
 
-    public void OnAttackEnd()
+    public void OnAttackStart(int counter) 
+    {
+        Self.InflictDamage(Target);
+    }
+
+    public void OnAttackEnd(int counter)
     {
         comboCounter--;
         animator.SetInteger("combo", comboCounter);

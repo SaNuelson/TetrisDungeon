@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 
 namespace Assets.Scripts.Tetris
 {
@@ -19,13 +20,16 @@ namespace Assets.Scripts.Tetris
         public MinoBlockDto[] Blocks;
         public Vector2Int BasePosition;
 
-        public MinoPreset Preset;
+        public MinoShapePreset Preset;
+
+        private int blocksLeftCounter;
+        public UnityEvent BeforeDestroyed = new UnityEvent();
 
         private bool _isConstructed = false;
 
         public Vector3 Anchor => new Vector3(Preset.Anchor.x, Preset.Anchor.y, 0);
 
-        public void ConstructFromPreset(MinoPreset preset, Sprite[] BlockSprites)
+        public void ConstructFromPreset(MinoShapePreset preset, TileFactory factory, bool showAnchor = false)
         {
             if (_isConstructed)
             {
@@ -43,32 +47,28 @@ namespace Assets.Scripts.Tetris
 
             for (int i = 0; i < preset.Offsets.Length; i++)
             {
-                var newBlock = new GameObject("NewTile");
-                var newBlockScript = newBlock.AddComponent<BlockScript>();
                 var blockOffset = preset.Offsets[i];
 
+                bool topRow = blockOffset.y >= preset.BoxSize.y - 1;
+                bool botRow = blockOffset.y <= 0;
+                bool leftCol = blockOffset.x <= 0;
+                bool rightCol = blockOffset.x >= preset.BoxSize.x - 1;
+
+                bool top = !topRow && fillMap[blockOffset.x, blockOffset.y + 1];
+                bool topRight = !topRow && !rightCol && fillMap[blockOffset.x + 1, blockOffset.y + 1];
+                bool right = !rightCol && fillMap[blockOffset.x + 1, blockOffset.y];
+                bool botRight = !botRow && !rightCol && fillMap[blockOffset.x + 1, blockOffset.y - 1];
+                bool bot = !botRow && fillMap[blockOffset.x, blockOffset.y - 1];
+                bool botLeft = !botRow && !leftCol && fillMap[blockOffset.x - 1, blockOffset.y - 1];
+                bool left = !leftCol && fillMap[blockOffset.x - 1, blockOffset.y];
+                bool topLeft = !topRow && !leftCol && fillMap[blockOffset.x - 1, blockOffset.y + 1];
+
+                var newBlock = factory.MakeTile(top, topRight, right, botRight, bot, botLeft, left, topLeft);
+                var newBlockScript = newBlock.AddComponent<BlockScript>();
                 newBlock.transform.SetParent(transform, false);
                 newBlock.transform.localPosition += new Vector3(blockOffset.x, blockOffset.y, 0);
-
-                bool hasTopEdge = blockOffset.y >= preset.BoxSize.y - 1 || !fillMap[blockOffset.x, blockOffset.y + 1];
-                bool hasBotEdge = blockOffset.y <= 0 || !fillMap[blockOffset.x, blockOffset.y - 1];
-                bool hasLeftEdge = blockOffset.x <= 0 || !fillMap[blockOffset.x - 1, blockOffset.y];
-                bool hasRightEdge = blockOffset.x >= preset.BoxSize.x - 1 || !fillMap[blockOffset.x + 1, blockOffset.y];
-
-                string seekedName = (hasTopEdge ? "0" : "1")
-                    + (hasRightEdge ? "0" : "1")
-                    + (hasBotEdge ? "0" : "1")
-                    + (hasLeftEdge ? "0" : "1");
-
-                newBlockScript.Color = preset.ForegroundColor;
-                foreach (var sprite in BlockSprites)
-                {
-                    if (sprite.name == seekedName)
-                    {
-                        newBlockScript.Sprite = sprite;
-                        break;
-                    }
-                }
+                newBlockScript.Color = preset.Color;
+                newBlockScript.BeforeDestroyed.AddListener(OnBlockDestroyed);
 
                 Blocks[i] = new MinoBlockDto()
                 {
@@ -77,44 +77,17 @@ namespace Assets.Scripts.Tetris
                 };
             }
 
-            _isConstructed = true;
-        }
-
-        public void ConstructPreview(MinoPreset preset)
-        {
-            if (_isConstructed)
+            if (showAnchor)
             {
-                Debug.LogError("TetrominoScript.Construct -- already constructed");
-                return;
+                var anchorBlock = factory.MakeTile(false, false, false, false, false, false, false, false);
+                var anchorBlockScript = anchorBlock.AddComponent<BlockScript>();
+                anchorBlockScript.Color = Color.red;
+                anchorBlock.transform.SetParent(transform, false);
+                anchorBlock.transform.localScale = 0.5f * Vector3.one;
+                anchorBlock.transform.localPosition = new Vector3(preset.Anchor.x, preset.Anchor.y, 0);
             }
 
-            Blocks = new MinoBlockDto[preset.Offsets.Length];
-            gameObject.name = preset.Name;
-            Preset = preset;
-
-            var fillMap = new bool[preset.BoxSize.x, preset.BoxSize.y];
-            foreach (var offset in preset.Offsets)
-                fillMap[offset.x, offset.y] = true;
-
-            for (int i = 0; i < preset.Offsets.Length; i++)
-            {
-                var newBlock = new GameObject("NewTile");
-                var newBlockScript = newBlock.AddComponent<BlockScript>();
-                var blockOffset = preset.Offsets[i];
-
-                newBlock.transform.SetParent(transform, false);
-                newBlock.transform.position += new Vector3(blockOffset.x, blockOffset.y, 0);
-
-                newBlockScript.Color = preset.ForegroundColor;
-                newBlockScript.Sprite = Sprite.Create(Utils.CreateSolidTexture(100, 100, Color.yellow), new Rect(0, 0, 100, 100), new Vector2(0.5f, 0.5f));
-
-                Blocks[i] = new MinoBlockDto()
-                {
-                    Block = newBlockScript,
-                    Offset = blockOffset
-                };
-            }
-
+            blocksLeftCounter = Blocks.Length;
             _isConstructed = true;
         }
 
@@ -126,11 +99,8 @@ namespace Assets.Scripts.Tetris
 
         public void MoveTo(Vector2Int newBasePosition)
         {
-            Vector2Int baseOffset = newBasePosition - BasePosition;
-            foreach (var block in Blocks)
-            {
-                block.Block.transform.localPosition += new Vector3(baseOffset.x, baseOffset.y, 0);
-            }
+            var offset = newBasePosition - BasePosition;
+            transform.localPosition += new Vector3(offset.x, offset.y, 0);
             BasePosition = newBasePosition;
         }
 
@@ -185,17 +155,17 @@ namespace Assets.Scripts.Tetris
             return rotatedOffsets;
         }
 
-        //private void OnDrawGizmos()
-        //{
-        //    var botleft = transform.position - new Vector3(.5f, .5f, 0);
-        //    var botright = new Vector3(botleft.x + Preset.BoxSize.x, botleft.y);
-        //    var topleft = new Vector3(botleft.x, botleft.y + Preset.BoxSize.y);
-        //    var topright = new Vector3(botright.x, topleft.y);
+        private void OnDestroy()
+        {
+            BeforeDestroyed.Invoke();
+        }
 
-        //    Gizmos.DrawLine(topleft, topright);
-        //    Gizmos.DrawLine(topright, botright);
-        //    Gizmos.DrawLine(botright, botleft);
-        //    Gizmos.DrawLine(botleft, topleft);
-        //}
+        private void OnBlockDestroyed()
+        {
+            blocksLeftCounter--;
+
+            if (blocksLeftCounter == 0)
+                Destroy(gameObject);
+        }
     }
 }

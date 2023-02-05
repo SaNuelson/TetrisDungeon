@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180ebb50472c3bb48b17437066bf0b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Combatable: {fileID: 7885643434961127760}
+  Self: {fileID: 7885643434961127760}
   Target: {fileID: 0}
 --- !u!114 &7885643434961127760
 MonoBehaviour:
@@ -134,6 +134,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 100
   currentHealth: 0
+  AttackSoundSet:
+  - {fileID: 8300000, guid: 20ed9acfe36387c48877e3744492dc79, type: 3}
+  - {fileID: 8300000, guid: 03cfbe66fe21c9f42a5f0f9714e91065, type: 3}
+  - {fileID: 8300000, guid: de53877fff8c7254c8afaac380edeffc, type: 3}
+  HurtSoundSet:
+  - {fileID: 8300000, guid: ab54a512a18d47245928e85141bda9bd, type: 3}
+  - {fileID: 8300000, guid: dae3155fcff9feb4492f41db833f049c, type: 3}
+  - {fileID: 8300000, guid: e37e37a2935c0764180c76d6148fc9fd, type: 3}
+  DeathSoundSet:
+  - {fileID: 8300000, guid: be866e36802b00141bab6562c5b1b842, type: 3}
+  MaxMana: 100
+  currentMana: 0
   MinAttackDamage: 5
   MaxAttackDamage: 10
   HealthChanged:
@@ -141,6 +153,17 @@ MonoBehaviour:
       m_Calls: []
     OldValue: 0
     NewValue: 0
+  Killed:
+    m_PersistentCalls:
+      m_Calls: []
+  ManaChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    OldValue: 0
+    NewValue: 0
+  Attacking:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6466846255515765055
 MonoBehaviour:
   m_ObjectHideFlags: 0

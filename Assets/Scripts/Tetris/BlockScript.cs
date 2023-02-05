@@ -1,19 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Scripts.Tetris
 {
     public class BlockScript : MonoBehaviour
     {
-        private void Awake()
-        {
 
+        [SerializeField] private Color color;
+        [SerializeField] private SpriteRenderer spriteRenderer;
+
+        public UnityEvent BeforeDestroyed = new UnityEvent();
+
+        private void Init()
+        {
             spriteRenderer = GetComponent<SpriteRenderer>();
             if (spriteRenderer == null)
                 spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
             spriteRenderer.sortingLayerName = "Tetris Mainground";
             color = spriteRenderer.color;
+        }
+
+        private void Awake()
+        {
+            Init();
+        }
+
+        private void OnDestroy()
+        {
+            BeforeDestroyed.Invoke();
         }
 
         public Color Color
@@ -23,7 +39,7 @@ namespace Assets.Scripts.Tetris
             {
                 color = value;
                 if (spriteRenderer == null)
-                    spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+                    Init();
                 spriteRenderer.color = value;
             }
         }
@@ -34,12 +50,9 @@ namespace Assets.Scripts.Tetris
             set
             {
                 if (spriteRenderer == null)
-                    spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+                    Init();
                 spriteRenderer.sprite = value;
             }
         }
-
-        [SerializeField] private Color color;
-        [SerializeField] private SpriteRenderer spriteRenderer;
     }
 }
