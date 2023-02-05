@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Combatable))]
 public class StatsView : MonoBehaviour
 {
     public Combatable Combatable;
@@ -14,15 +13,6 @@ public class StatsView : MonoBehaviour
     private Slider manaBar;
     private Text manaLabel;
 
-    private void Awake()
-    {
-        if (Combatable == null)
-            Combatable = GetComponent<Combatable>();
-
-        Combatable.HealthChanged.AddListener(OnHealthChanged);
-        Combatable.ManaChanged.AddListener(OnManaChanged);
-    }
-
     private void Start()
     {
         var hpGroup = transform.Find("HPBar");
@@ -32,6 +22,16 @@ public class StatsView : MonoBehaviour
         var mpGroup = transform.Find("MPBar");
         manaBar = mpGroup.GetComponentInChildren<Slider>();
         manaLabel = mpGroup.GetComponentInChildren<Text>();
+
+
+        if (Combatable == null)
+            Combatable = transform.parent.GetComponentInChildren<Combatable>();
+
+        Combatable.HealthChanged.AddListener(OnHealthChanged);
+        Combatable.ManaChanged.AddListener(OnManaChanged);
+
+        OnHealthChanged(0, 0);
+        OnManaChanged(0, 0);
     }
 
     public void OnHealthChanged(int oldHealth, int newHealth)

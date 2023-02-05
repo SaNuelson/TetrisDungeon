@@ -24,7 +24,6 @@ public class AutoCombatable : MonoBehaviour
         }
     }
 
-    private PlayerScript player;
 
     private void Awake()
     {

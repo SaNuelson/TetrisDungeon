@@ -8,10 +8,6 @@ public class Combatable : MonoBehaviour
     public int MaxHealth;
     [SerializeField] private int currentHealth;
 
-    public AudioClip[] AttackSoundSet;
-    public AudioClip[] HurtSoundSet;
-    public AudioClip[] DeathSoundSet;
-
     public int CurrentHealth
     {
         get => currentHealth;
@@ -55,19 +51,17 @@ public class Combatable : MonoBehaviour
     public ValueChangeUnityEvent<int> ManaChanged = new ValueChangeUnityEvent<int>();
     public UnityEvent Attacking = new UnityEvent();
 
-    private void Start()
+    private void Awake()
     {
         currentHealth = MaxHealth;
         currentMana = MaxMana;
-
-        HealthChanged.AddListener(OnHealthChanged);
-        Killed.AddListener(OnKilled);
-        Attacking.AddListener(OnAttacking);
     }
 
     public float ReceiveDamage(int amount)
     {
+        var oldHealth = CurrentHealth;
         CurrentHealth -= amount;
+        HealthChanged.Invoke(oldHealth, currentHealth);
         return amount;
     }
 
@@ -80,26 +74,10 @@ public class Combatable : MonoBehaviour
 
     public float ChangeMana(int amount)
     {
+        var oldMana = CurrentMana;
         CurrentMana += amount;
+        ManaChanged.Invoke(oldMana, CurrentMana);
         return amount;
-    }
-
-    private void OnHealthChanged(int oldHp, int newHp)
-    {
-        if (oldHp > newHp && HurtSoundSet.Length > 0)
-            SoundManager.instance.Play(HurtSoundSet[Random.Range(0, HurtSoundSet.Length)]);
-    }
-
-    private void OnKilled()
-    {
-        if (DeathSoundSet.Length > 0)
-            SoundManager.instance.Play(DeathSoundSet[Random.Range(0, DeathSoundSet.Length)]);
-    }
-
-    private void OnAttacking()
-    {
-        if (AttackSoundSet.Length > 0)
-            SoundManager.instance.Play(AttackSoundSet[Random.Range(0, AttackSoundSet.Length)]);
     }
 }
 

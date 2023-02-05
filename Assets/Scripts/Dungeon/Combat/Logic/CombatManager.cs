@@ -1,38 +1,25 @@
+using Assets.Scripts.Tetris;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
+    public GridManager tetris;
+    public Combatable player;
+    public Combatable enemy;
 
-    private static CombatManager instance = null;
-    public static CombatManager Instance
+    private void Start()
     {
-        get
-        {
-            if (instance == null)
-            {
-                Debug.LogError("CombatManager instance accessed while outside a fight");
-                return null;
-            }
-            return instance;
-        }
+        if (tetris == null)
+            tetris = GetComponentInChildren<GridManager>();
+
+        if (player == null)
+            player = GetComponentsInChildren<Combatable>()[0];
+
+        if (enemy == null)
+            enemy = GetComponentsInChildren<Combatable>()[1];
+
+        tetris.LineCleared.AddListener(() => player.InflictDamage(enemy));
     }
-
-    public static void Initialize()
-    {
-        if (instance != null)
-        {
-            Destroy(instance);
-        }
-
-        GameObject combatManGo = new GameObject("CombatManager");
-        CombatManager combatManager = combatManGo.AddComponent<CombatManager>();
-        instance = combatManager;
-    }
-
-    [SerializeField] private Combatable[] PlayerTeam;
-    [SerializeField] private Combatable[] EnemyTeam;
-
-
 }
