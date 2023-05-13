@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts.Util
 {
@@ -9,22 +11,23 @@ namespace Assets.Scripts.Util
         MultiBag,
         History
     }
-    public class RandomSampler<T>
+    public class CollectionSampler<T>
     {
         private Strategy picker;
 
-        public RandomSampler(T[] items, StrategyType strategy, int strategyParam)
+        public CollectionSampler(IEnumerable<T> items, StrategyType strategy, int strategyParam)
         {
+            var arr = items.ToArray();
             switch (strategy)
             {
                 case StrategyType.Random:
-                    picker = new PseudoRandomStrategy(items);
+                    picker = new PseudoRandomStrategy(arr);
                     break;
                 case StrategyType.Bag:
-                    picker = new BagStrategy(items);
+                    picker = new BagStrategy(arr);
                     break;
                 case StrategyType.MultiBag:
-                    picker = new MultiBagStrategy(items, strategyParam);
+                    picker = new MultiBagStrategy(arr, strategyParam);
                     break;
                 default:
                     throw new NotImplementedException();

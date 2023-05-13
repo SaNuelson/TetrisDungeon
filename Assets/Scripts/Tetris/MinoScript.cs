@@ -8,7 +8,7 @@ using UnityEngine.Events;
 namespace Assets.Scripts.Tetris
 {
     [System.Serializable]
-    public class MinoBlockDto
+    public class MinoBlockData
     {
         public BlockScript Block;
         public Vector2Int Offset;
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Tetris
     public class MinoScript : MonoBehaviour
     {
 
-        public MinoBlockDto[] Blocks;
+        public MinoBlockData[] Blocks;
         public Vector2Int BasePosition;
 
         public MinoShapePreset Preset;
@@ -25,19 +25,27 @@ namespace Assets.Scripts.Tetris
         private int blocksLeftCounter;
         public UnityEvent BeforeDestroyed = new UnityEvent();
 
-        private bool _isConstructed = false;
+        private bool isConstructed = false;
 
         public Vector3 Anchor => new Vector3(Preset.Anchor.x, Preset.Anchor.y, 0);
 
+        public static MinoScript CreateFromPreset(MinoShapePreset preset, TileFactory factory, bool showAnchor = false)
+        {
+            var minoGo = new GameObject("Mino");
+            var mino = minoGo.AddComponent<MinoScript>();
+            mino.ConstructFromPreset(preset, factory, showAnchor);
+            return mino;
+        }
+
         public void ConstructFromPreset(MinoShapePreset preset, TileFactory factory, bool showAnchor = false)
         {
-            if (_isConstructed)
+            if (isConstructed)
             {
                 Debug.LogError("TetrominoScript.Construct -- already constructed");
                 return;
             }
 
-            Blocks = new MinoBlockDto[preset.Offsets.Length];
+            Blocks = new MinoBlockData[preset.Offsets.Length];
             gameObject.name = preset.Name;
             Preset = preset;
 
@@ -70,7 +78,7 @@ namespace Assets.Scripts.Tetris
                 newBlockScript.Color = preset.Color;
                 newBlockScript.BeforeDestroyed.AddListener(OnBlockDestroyed);
 
-                Blocks[i] = new MinoBlockDto()
+                Blocks[i] = new MinoBlockData()
                 {
                     Block = newBlockScript,
                     Offset = blockOffset
@@ -88,13 +96,24 @@ namespace Assets.Scripts.Tetris
             }
 
             blocksLeftCounter = Blocks.Length;
-            _isConstructed = true;
+            isConstructed = true;
         }
 
         public void Move(Vector2Int direction)
         {
+            // Debug.Log($"Mino.Move({direction})");
             transform.localPosition += new Vector3(direction.x, direction.y, 0);
             BasePosition += direction;
+        }
+
+        public Vector2Int[] GetMoved(Vector2Int direction)
+        {
+            var moved = new Vector2Int[Blocks.Length];
+            for (int i = 0; i < Blocks.Length; i++)
+            {
+                moved[i] = Blocks[i].Offset + direction;
+            }
+            return moved;
         }
 
         public void MoveTo(Vector2Int newBasePosition)
@@ -102,6 +121,17 @@ namespace Assets.Scripts.Tetris
             var offset = newBasePosition - BasePosition;
             transform.localPosition += new Vector3(offset.x, offset.y, 0);
             BasePosition = newBasePosition;
+        }
+
+        public Vector2Int[] GetMovedTo(Vector2Int newBasePosition)
+        {
+            var offset = newBasePosition - BasePosition;
+            var moved = new Vector2Int[Blocks.Length];
+            for (int i = 0; i < Blocks.Length; i++)
+            {
+                moved[i] = Blocks[i].Offset + offset;
+            }
+            return moved;
         }
 
         public void Rotate(bool clockwise)
@@ -134,7 +164,7 @@ namespace Assets.Scripts.Tetris
             Vector2Int[] rotatedOffsets = new Vector2Int[Blocks.Length];
             for (int i = 0; i < Blocks.Length; i++)
             {
-                MinoBlockDto block = Blocks[i];
+                MinoBlockData block = Blocks[i];
                 var oldBlockCenterOffset = block.Offset - Preset.Anchor;
                 Vector2 newBlockCenterOffset;
                 if (clockwise)

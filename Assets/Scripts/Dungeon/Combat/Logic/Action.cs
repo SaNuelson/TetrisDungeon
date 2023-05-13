@@ -10,11 +10,7 @@ namespace Assets.Scripts.Dungeon.Combat.Logic
     public enum ActionTarget
     {
         Self,
-        FriendlyTarget, // single friendly
-        FriendlyOthers, // all friendly but self
-        FriendlyGroup, // all friendly incl. self
-        EnemyTarget, // single enemy
-        EnemyGroup // all enemy
+        Enemy
     };
 
     public class Action : ScriptableObject
@@ -37,7 +33,7 @@ namespace Assets.Scripts.Dungeon.Combat.Logic
             return true;
         }
 
-        public void Act(Combatable actor)
+        public void Act(Combatable actor, Combatable target)
         {
             if (!IsPossible(actor))
             {
@@ -48,7 +44,7 @@ namespace Assets.Scripts.Dungeon.Combat.Logic
 
             foreach(var eff in Effects)
             {
-                //eff.Apply();
+                eff.Apply(target);
             }
         }
     }
@@ -98,22 +94,9 @@ namespace Assets.Scripts.Dungeon.Combat.Logic
     [System.Serializable]
     public class Effect
     {
-        public ActionTarget Target;
-
-
         public void Apply(Combatable actor)
         {
-        }
 
-        private void AffectOne(Combatable target)
-        {
-
-        }
-
-        private void AffectGroup(Combatable[] targets)
-        {
-            foreach(var target in targets)
-                AffectOne(target);
         }
     }
 }

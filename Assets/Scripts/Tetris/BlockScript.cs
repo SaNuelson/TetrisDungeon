@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 namespace Assets.Scripts.Tetris
 {
+    [RequireComponent(typeof(SpriteRenderer))]
     public class BlockScript : MonoBehaviour
     {
 
@@ -16,8 +17,6 @@ namespace Assets.Scripts.Tetris
         private void Init()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
-            if (spriteRenderer == null)
-                spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
             spriteRenderer.sortingLayerName = "Tetris Mainground";
             color = spriteRenderer.color;
         }

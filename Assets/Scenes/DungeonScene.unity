@@ -244,8 +244,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d17d55fc7533211468d5d58198b1ed0e, type: 2}
   - {fileID: 11400000, guid: 33e0dd46ed3c31b4ab0d73eb7fc4150f, type: 2}
   LevelSize: {x: 20, y: 10}
-  CurrentLevel:
-    Rooms: []
+  Generator:
+    dungeonManager: {fileID: 0}
+    FactoryPreset: {fileID: 11400000, guid: 4b080bce6c8d48547bb89787fb72f487, type: 2}
+    ActiveRoom: {fileID: 0}
+  X: 0
+  Y: 0
+  Z: 0
 --- !u!4 &664539796
 Transform:
   m_ObjectHideFlags: 0

@@ -10,44 +10,58 @@ public class DungeonManager : MonoBehaviour
 {
     public MinoShapePreset[] RoomShapes;
     public Vector2Int LevelSize;
-
-    public Level CurrentLevel;
+    public MapGenerator Generator;
 
     private void Awake()
     {
+        Generator.dungeonManager = this;
         GetNextLevel();
     }
 
     private void GetNextLevel()
     {
-        CurrentLevel = new Level(this);
+        Generator.Generate();
     }
-}
 
-[System.Serializable]
-public class Level
-{
-    public Room[,] Grid;
-    public Room[] Rooms;
-
-    public Level(DungeonManager dungeon)
+    private void OnDrawGizmos()
     {
-        Grid = new Room[dungeon.LevelSize.x, dungeon.LevelSize.y];
-        Rooms = new Room[16];
+        var oldColor = Gizmos.color;
+        Gizmos.color = Color.white;
+        var tl = transform.position + new Vector3(0f, LevelSize.y, 0f);
+        var br = transform.position + new Vector3(LevelSize.x, 0f, 0f);
+        var bl = transform.position + new Vector3(0f, 0f, 0f);
+        GizmoExtensions.DrawRect(tl, br);
 
-        for (int x = 0; x < 4; x++)
+        Gizmos.color = new Color(1f, 1f, 1f, 0.5f);
+        GizmoExtensions.DrawGrid(tl, br, 1f, 1f);
+
+        if (Generator != null && Generator.FillMap != null)
         {
-            for (int y = 0; y < 4; y++)
+            for (int i = 0; i < LevelSize.y; i++)
             {
-                var newRoom = new Room();
-                Rooms[4 * x + y] = newRoom;
+                for (int j = 0; j < LevelSize.x; j++)
+                {
+                    if (Generator.FillMap[i,j])
+                    {
+                        GizmoExtensions.DrawX(
+                            bl + new Vector3(1f * j, 1f * i, 0f),
+                            bl + new Vector3(1f * (j + 1), 1f * (i + 1), 0f));
+                    }
+                }
             }
         }
-    }
-}
 
-[System.Serializable]
-public class Room
-{
-    public Combatable Enemy;
+        Gizmos.color = oldColor;
+    }
+
+
+    [ButtonTriggerable(nameof(SpawnMino))]
+    public bool X;
+    public void SpawnMino() { Generator.SpawnMino(); }
+    [ButtonTriggerable(nameof(RotateMino))]
+    public bool Y;
+    public void RotateMino() {  Generator.TryRotateMino(); }
+    [ButtonTriggerable(nameof(TryMoveMino))]
+    public bool Z;
+    public void TryMoveMino() { Generator.TryMoveMino(); }
 }

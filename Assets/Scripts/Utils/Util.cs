@@ -55,6 +55,7 @@ namespace Assets.Scripts.Util
 
     public static class RandomUtils
     {
+        // TODO: Remove in favor of RandomExtensions
         public static Vector2Int Vec2Int(int maxX, int maxY)
         {
             return new Vector2Int(Random.Range(0, maxX), Random.Range(0, maxY));

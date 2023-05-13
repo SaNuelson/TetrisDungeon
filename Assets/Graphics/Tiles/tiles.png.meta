@@ -94,7 +94,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 91
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -165,7 +165,7 @@ TextureImporter:
         serializedVersion: 2
         x: 94
         y: 1032
-        width: 92
+        width: 91
         height: 91
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -186,7 +186,7 @@ TextureImporter:
         serializedVersion: 2
         x: 189
         y: 1032
-        width: 91
+        width: 92
         height: 91
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -228,7 +228,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 938
-        width: 91
+        width: 92
         height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -270,7 +270,7 @@ TextureImporter:
         serializedVersion: 2
         x: 189
         y: 937
-        width: 91
+        width: 92
         height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -312,8 +312,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 843
-        width: 91
-        height: 91
+        width: 92
+        height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -334,7 +334,7 @@ TextureImporter:
         x: 94
         y: 843
         width: 92
-        height: 91
+        height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -354,8 +354,8 @@ TextureImporter:
         serializedVersion: 2
         x: 189
         y: 843
-        width: 91
-        height: 91
+        width: 92
+        height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -376,7 +376,7 @@ TextureImporter:
         x: 283
         y: 843
         width: 92
-        height: 91
+        height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -396,7 +396,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 748
-        width: 91
+        width: 92
         height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -438,7 +438,7 @@ TextureImporter:
         serializedVersion: 2
         x: 189
         y: 748
-        width: 91
+        width: 92
         height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
