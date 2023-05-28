@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Combatable))]
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Animator))]
 public class CombatableRenderer : MonoBehaviour
 {
-    private Combatable Combatable;
     private SpriteRenderer SpriteRenderer;
     private Animator Animator;
+    private Combatable Combatable;
+
+    [Header("SFX")]
+    public AudioClip[] AttackSoundSet;
+    public AudioClip[] HurtSoundSet;
+    public AudioClip[] DeathSoundSet;
 
     [Header("OnHit Effect")]
-    public FloatingText FlyingText;
     public AnimationCurve HitAnimationCurve;
     public float HitShowTime = 1f;
     private bool hitShowing = false;
@@ -22,17 +25,17 @@ public class CombatableRenderer : MonoBehaviour
     void Start()
     {
         if (Combatable == null)
-            Combatable = GetComponent<Combatable>();
+            Combatable = transform.parent.GetComponentInChildren<Combatable>();
 
         Combatable.HealthChanged.AddListener(OnHealthChanged);
+        Combatable.Attacking.AddListener(OnAttack);
+        Combatable.Killed.AddListener(OnDeath);
     
         if (SpriteRenderer == null)
             SpriteRenderer = GetComponent<SpriteRenderer>();
 
         if (Animator == null)
             Animator = GetComponent<Animator>();
-
-        FlyingText.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -53,25 +56,38 @@ public class CombatableRenderer : MonoBehaviour
         }
     }
 
+    public void OnAttack()
+    {
+        Animator.SetTrigger("attack");
+
+        if (AttackSoundSet != null && AttackSoundSet.Length > 0)
+            SoundManager.instance.Play(AttackSoundSet[Random.Range(0, AttackSoundSet.Length)]);
+    }
+
     public void OnHit(float amount)
     {
-        hitShowing = true;
-        hitStartTime = Time.time;
         Animator.SetTrigger("hit");
         ShowHit(amount);
+
+        if (HurtSoundSet != null && HurtSoundSet.Length > 0)
+            SoundManager.instance.Play(HurtSoundSet[Random.Range(0, HurtSoundSet.Length)]);
     }
 
     private void ShowHit(float amount)
     {
-        GameObject hitText = Instantiate(FlyingText.gameObject);
+        hitShowing = true;
+        hitStartTime = Time.time;
+
+        GameObject hitText = FloatingText.Construct("-" + amount, Vector3.up, Color.red, Color.clear);
         hitText.transform.position = transform.position + new Vector3(Random.Range(-1f, 1f), 2.5f, 0);
-        var hitTextScript = hitText.GetComponent<FloatingText>();
-        hitTextScript.Construct("-" + amount, Vector3.up, Color.red, Color.clear);
     }
 
     public void OnDeath()
     {
         Animator.SetTrigger("dying");
+
+        if (DeathSoundSet != null && DeathSoundSet.Length > 0)
+            SoundManager.instance.Play(DeathSoundSet[Random.Range(0, DeathSoundSet.Length)]);
     }
 
     void UpdateHitShow()

@@ -2,13 +2,16 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Combatable))]
+[RequireComponent(typeof(CombatableRenderer))]
 public class AutoCombatable : MonoBehaviour
 {
-    public Combatable Combatable;
+    public Combatable Self;
+
     public Combatable Target;
 
+
     public bool IsActive;
-    public bool IsAlive => IsActive && Combatable.CurrentHealth >= 0;
+    public bool IsAlive => IsActive && Self.CurrentHealth >= 0;
 
     public float AttackSpeed;
     private IEnumerator attackClock;
@@ -21,12 +24,11 @@ public class AutoCombatable : MonoBehaviour
         }
     }
 
-    private PlayerScript player;
 
     private void Awake()
     {
-        if (Combatable == null)
-            Combatable = GetComponent<Combatable>();
+        if (Self == null)
+            Self = GetComponent<Combatable>();
     }
 
     private void Start()
@@ -37,6 +39,6 @@ public class AutoCombatable : MonoBehaviour
 
     private void TakeAction()
     {
-        Combatable.InflictDamage(Target);
+        Self.InflictDamage(Target);
     }
 }

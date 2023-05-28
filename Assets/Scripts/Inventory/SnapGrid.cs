@@ -8,10 +8,7 @@ public class SnapGrid : MonoBehaviour
 
     public Vector2Int GridSize;
 
-    public Sprite[] SpriteGroup;
-    public TileManagerType TileType;
-
-    private TileManager tileFactory;
+    public TileFactory TileFactory;
 
     [SerializeField] private bool[] Grid;
     [SerializeField] private GameObject[,] blockGrid;
@@ -19,11 +16,6 @@ public class SnapGrid : MonoBehaviour
     public void Reassemble(bool force = false)
     {
         Debug.Log("REASSEMBLE");
-        if (tileFactory == null || force)
-        {
-            tileFactory = new TileManager(SpriteGroup, TileType);
-        }
-
         if (blockGrid == null || blockGrid.GetLength(0) != GridSize.x || blockGrid.GetLength(1) != GridSize.y)
         {
             if (blockGrid != null)
@@ -50,7 +42,7 @@ public class SnapGrid : MonoBehaviour
 
         if (shouldExist && !doesExist)
         {
-            GameObject newBlock = tileFactory.GetTile(GetTileName(x, y));
+            GameObject newBlock = TileFactory.MakeTile(GetTileName(x, y));
             newBlock.transform.SetParent(transform, false);
             newBlock.transform.localPosition = new Vector2(x, y);
             blockGrid[x, y] = newBlock;
@@ -68,7 +60,7 @@ public class SnapGrid : MonoBehaviour
             if (blockSpriteRenderer.sprite.name != expectedName)
             {
                 MonoBehaviour.DestroyImmediate(block);
-                var newBlock = tileFactory.GetTile(expectedName);
+                var newBlock = TileFactory.MakeTile(expectedName);
                 newBlock.transform.SetParent(transform, false);
                 newBlock.transform.localPosition = new Vector2(x, y);
                 blockGrid[x, y] = newBlock;
@@ -77,9 +69,9 @@ public class SnapGrid : MonoBehaviour
 
         string GetTileName(int x, int y)
         {
-            if (TileType == TileManagerType.Quad)
+            if (TileFactory.Type == TileType.Quad)
             {
-                return tileFactory.GetTileName(
+                return TileFactory.GetTileName(
                     HasBlock(x, y + 1),
                     HasBlock(x + 1, y),
                     HasBlock(x, y - 1),
@@ -87,7 +79,7 @@ public class SnapGrid : MonoBehaviour
             }
             else
             {
-                return tileFactory.GetTileName(
+                return TileFactory.GetTileName(
                     HasBlock(x, y + 1),
                     HasBlock(x + 1, y + 1),
                     HasBlock(x + 1, y),

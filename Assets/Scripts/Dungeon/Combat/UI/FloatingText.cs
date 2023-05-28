@@ -16,25 +16,23 @@ public class FloatingText : MonoBehaviour
     private TextMeshPro Text;
     private bool isConstructed;
 
-    public void Construct(string text, Vector3 direction, Color initialColor, Color finalColor)
+    public static GameObject Construct(string text, Vector3 direction, Color initColor, Color finalColor)
     {
-        if (isConstructed)
-        {
-            Debug.LogError("FloatingText already constructed");
-            return;
-        }
+        var go = new GameObject("Floating combat text");
+        go.transform.localScale = Vector3.one * 0.25f;
 
-        if (Text == null)
-        {
-            Text = transform.Find("Text (TMP)").GetComponent<TextMeshPro>();
-            Text.text = text;
-        }
+        var floatingText = go.AddComponent<FloatingText>();
 
-        InitialTime = Time.time;
-        Direction = direction;
-        InitialColor = initialColor;
-        ExittingColor = finalColor;
-        gameObject.SetActive(true);
+        floatingText.InitialTime = Time.time;
+        floatingText.Direction = direction;
+        floatingText.InitialColor = initColor;
+        floatingText.ExittingColor = finalColor;
+
+        floatingText.Text = go.AddComponent<TextMeshPro>();
+        floatingText.Text.text = text;
+        floatingText.Text.alignment = TextAlignmentOptions.Center;
+
+        return go;
     }
 
     private void FixedUpdate()
