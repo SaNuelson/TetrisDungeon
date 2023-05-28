@@ -243,14 +243,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f2cb2d985f2b35b49af1bfaf26775f53, type: 2}
   - {fileID: 11400000, guid: d17d55fc7533211468d5d58198b1ed0e, type: 2}
   - {fileID: 11400000, guid: 33e0dd46ed3c31b4ab0d73eb7fc4150f, type: 2}
-  LevelSize: {x: 20, y: 10}
+  LevelSize: {x: 20, y: 20}
   Generator:
     dungeonManager: {fileID: 0}
     FactoryPreset: {fileID: 11400000, guid: 4b080bce6c8d48547bb89787fb72f487, type: 2}
+    StepTime: 0.3
     ActiveRoom: {fileID: 0}
-  X: 0
-  Y: 0
-  Z: 0
+    ActiveDirection: 0
 --- !u!4 &664539796
 Transform:
   m_ObjectHideFlags: 0
@@ -259,7 +258,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 664539794}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -9.95, y: -9.86, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

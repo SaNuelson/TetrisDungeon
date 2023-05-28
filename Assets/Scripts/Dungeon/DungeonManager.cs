@@ -53,15 +53,4 @@ public class DungeonManager : MonoBehaviour
 
         Gizmos.color = oldColor;
     }
-
-
-    [ButtonTriggerable(nameof(SpawnMino))]
-    public bool X;
-    public void SpawnMino() { Generator.SpawnMino(); }
-    [ButtonTriggerable(nameof(RotateMino))]
-    public bool Y;
-    public void RotateMino() {  Generator.TryRotateMino(); }
-    [ButtonTriggerable(nameof(TryMoveMino))]
-    public bool Z;
-    public void TryMoveMino() { Generator.TryMoveMino(); }
 }

@@ -8,11 +8,20 @@ using Random = System.Random;
 
 public static class RandomExtensions
 {
+    public static bool Flip(this Random random)
+        => random.NextBool();
+
     public static T Choice<T>(this Random random, T[] items)
         => items[random.Next(0, items.Length)];
 
     public static T Choice<T>(this Random random, List<T> items)
         => items[random.Next(0, items.Count)];
+
+    public static T Choice<T>(this Random random) where T : Enum
+        => random.Choice((T[])Enum.GetValues(typeof(T)));
+
+    public static bool NextBool(this Random random)
+        => random.NextFloat() < 0.5f;
 
     public static float NextFloat(this Random random)
         => (float)random.NextDouble();
