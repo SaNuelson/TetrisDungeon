@@ -34,13 +34,30 @@ namespace Assets.Scripts.Tetris
                 Reset();
             }
 
-            DrawDefaultInspector();
-
             MinoShapePreset preset = target as MinoShapePreset;
 
-            EditorGUILayout.Space();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(MinoShapePreset.Name)));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(MinoShapePreset.Color)));
+            preset.BoxSize = EditorGUILayout.Vector2IntField("BoxSize", preset.BoxSize);
+
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Preview:");
+            EditorGUILayout.BeginVertical();
+            for (int i = preset.BoxSize.y - 1; i >= 0 ; i--)
+            {
+                EditorGUILayout.BeginHorizontal();
+                for (int j = 0; j < preset.BoxSize.x; j++)
+                {
+                    var point = new Vector2Int(j, i);
+                    var oldValue = preset.Offsets.Contains(point);
+                    var newValue = EditorGUILayout.Toggle(oldValue, GUILayout.Width(20f));
+                    if (oldValue && !newValue)
+                        preset.Offsets.Remove(point);
+                    else if (!oldValue && newValue)
+                        preset.Offsets.Add(point);
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.EndVertical();
 
             Texture2D minoPreviewTex = null;
             minoPreviews.TryGetValue(preset.Name, out minoPreviewTex);

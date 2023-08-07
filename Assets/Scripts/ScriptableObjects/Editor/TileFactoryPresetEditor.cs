@@ -89,7 +89,7 @@ public class TileFactoryPresetEditor : Editor
             }
         }
         preset.BoxSize = boxSize;
-        preset.Offsets = offsets.ToArray();
+        preset.Offsets = offsets;
 
         Texture2D previewTex = null;
         minoPreviewScript.ConstructFromPreset(preset, factoryPreset.GetFactory());

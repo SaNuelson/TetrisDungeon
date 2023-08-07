@@ -45,7 +45,7 @@ namespace Assets.Scripts.Tetris
                 return;
             }
 
-            Blocks = new MinoBlockData[preset.Offsets.Length];
+            Blocks = new MinoBlockData[preset.Offsets.Count];
             gameObject.name = preset.Name;
             Preset = preset;
 
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Tetris
             foreach (var offset in preset.Offsets)
                 fillMap[offset.x, offset.y] = true;
 
-            for (int i = 0; i < preset.Offsets.Length; i++)
+            for (int i = 0; i < preset.Offsets.Count; i++)
             {
                 var blockOffset = preset.Offsets[i];
 
